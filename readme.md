@@ -20,7 +20,7 @@
 </div>
 <p><br><br><span style="font-size:24px"><strong>Commands:</strong></span><br><span style="font-size:14px"><em>/dq info </em>- Shows how many quests you've completed<em><br><strong>Debug commands:</strong><br></em></span></p>
 <div class="spoiler">
-<p><em>/dq debug &lt;player&gt; complete &lt;number&gt; </em>- Force completes a quest.<br><em>/dq debug &lt;player&gt; generate &lt;count&gt; </em>- Generates new quests.<br><em>/dq debug &lt;player&gt; resetrerolls </em>- Resets a players' re-rolls.<br><em>/dq debug &lt;player&gt; questscompleted &lt;amount&gt; </em>- Sets the total quests completed.</p>
+<p><em>/dq debug &lt;player&gt; complete &lt;number&gt; </em>- Force completes a quest.<br><em>/dq debug &lt;player&gt; generate &lt;count&gt; </em>- Generates new quests.<br><em>/dq debug &lt;player&gt; resetrerolls </em>- Resets a players' re-rolls.<br><em>/dq debug &lt;player&gt; questscompleted &lt;amount&gt; </em>- Sets the total quests completed.<br><em>/dq debug &lt;player&gt; setquest &lt;number&gt; &lt;type&gt; &lt;identifier&gt; </em>- Replaces a player's quest with the input data.</p>
 </div>
 <p>&nbsp;<br><br><span style="font-size:24px">Compatible with other mods that have GUI elements!</span><br><span style="font-size:14px"><em>Use the '<strong>questListVerticalOffset</strong>' config option to lower the quest list.</em></span><br><picture><img src="https://github.com/Serilum/.cdn/raw/main/projects/daily-quests/g.png"></picture><br><br><span style="font-size:24px">An example of completing a quest!</span><br><span style="font-size:14px"><em>Taming is the easy part, finding the actual animal to tame is where the challenge is.</em></span></p>
 <div class="spoiler">

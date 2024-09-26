@@ -2,6 +2,7 @@ package com.natamus.dailyquests.cmds;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
 import com.natamus.collective.functions.MessageFunctions;
 import com.natamus.dailyquests.config.ConfigHandler;
 import com.natamus.dailyquests.data.Constants;
@@ -18,6 +19,8 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 
@@ -162,6 +165,65 @@ public class CommandDailyQuests {
 					MessageFunctions.sendMessage(source, targetPlayer.getName().getString() + " now has " + amount + " completed quests!", ChatFormatting.GRAY, true);
 					return 1;
 				})))))
+
+				.then(Commands.literal("debug")
+				.then(Commands.argument("target", EntityArgument.player())
+				.then(Commands.literal("setquest")
+				.then(Commands.argument("number", IntegerArgumentType.integer(1, 5))
+				.then(Commands.argument("type", StringArgumentType.string())
+				.then(Commands.argument("identifier", StringArgumentType.string())
+				.executes((command) -> {
+					CommandSourceStack source = command.getSource();
+					if (!source.hasPermission(2)) {
+						MessageFunctions.sendMessage(source, "You do not have the permissions to use that command.", ChatFormatting.RED);
+						return 0;
+					}
+
+					ServerPlayer targetPlayer = EntityArgument.getPlayer(command, "target");
+					ServerLevel serverLevel = targetPlayer.serverLevel();
+
+					int questNumber = IntegerArgumentType.getInteger(command, "number");
+					String questTypeString = StringArgumentType.getString(command, "type");
+					String questIdentifierString = StringArgumentType.getString(command, "identifier").replace("-", ":");
+
+					AbstractQuest questType = QuestWrapper.getQuestTypeFromName(questTypeString);
+					if (questType == null) {
+						MessageFunctions.sendMessage(source, "Unable to find quest type from string: " + questTypeString, ChatFormatting.RED);
+						return 0;
+					}
+
+					ResourceLocation identifier = ResourceLocation.parse(questIdentifierString);
+					if (identifier == null) {
+						MessageFunctions.sendMessage(source, "Unable to find quest identifier from string: " + questIdentifierString, ChatFormatting.RED);
+						return 0;
+					}
+
+					QuestObject quest = new QuestObject(questType, identifier, 0, questType.getRandomQuestProgressGoal(serverLevel, identifier));
+
+					UUID playerUUID = targetPlayer.getUUID();
+					if (!Variables.playerQuestDataMap.containsKey(playerUUID)) {
+						GenerateQuests.replaceAllPlayerQuests(targetPlayer.serverLevel(), targetPlayer, ConfigHandler.defaultTotalQuestCount);
+					}
+
+					LinkedHashMap<AbstractQuest, QuestObject> quests = new LinkedHashMap<>();
+					for (QuestObject questObject : Variables.playerQuestDataMap.get(playerUUID).values()) {
+						if (quests.size()+1 == questNumber) {
+							quests.put(quest.getType(), quest);
+							continue;
+						}
+
+						quests.put(questObject.getType(), questObject);
+					}
+
+
+					Variables.playerQuestDataMap.put(playerUUID, quests);
+
+					Util.saveQuestDataPlayer(targetPlayer);
+					Util.sendQuestDataToClient(targetPlayer);
+
+					MessageFunctions.sendMessage(source, "Added the " + quest.getQuestTitle(serverLevel) + " quest type to " + targetPlayer.getName().getString() + "'s quest list.", ChatFormatting.GRAY, true);
+					return 1;
+				})))))))
 			);
 		}
 	}

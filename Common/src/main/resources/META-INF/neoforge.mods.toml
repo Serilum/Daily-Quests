@@ -6,11 +6,11 @@ logoFile="icon.png"
 
 [[mods]]
 modId="dailyquests"
-version="1.1"
+version="1.2"
 displayName="Daily Quests"
 displayURL="https://serilum.com/mod/daily-quests"
 authors="Rick South"
-description='''Completele randomly generated quests each day for experience and loot! Made for the 2024 CurseForge ModJam.
+description='''Complete randomly generated quests each day for experience and loot! Made for the 2024 CurseForge ModJam.
 '''
 credits='''Thank you very much to my Membership sponsors for supporting the development of this mod:  
 

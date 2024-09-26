@@ -42,7 +42,7 @@ public class SlayMob extends AbstractQuest {
 	@Override
 	public boolean isAllowedIdentifier(Level level, ResourceLocation identifier) {
 		EntityType<?> entityType = this.getRegistry(level).get(identifier);
-		return entityType.getCategory().equals(MobCategory.MONSTER) && !entityType.equals(EntityType.EVOKER);
+		return entityType.getCategory().equals(MobCategory.MONSTER) && !entityType.equals(EntityType.ILLUSIONER);
 	}
 
 	@Override @Nullable
