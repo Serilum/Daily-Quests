@@ -1,0 +1,30 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.natamus.dailyquests.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+	"AbstractVillagerMixin",
+	"BeehiveBlockMixin",
+	"BrewingStandMenuMixin",
+	"CreeperMixin",
+	"EnchantmentMenuMixin",
+	"FishingHookMixin",
+	"FurnaceMixin",
+	"GhastMixin",
+	"LivingEntityMixin",
+	"PlayerMixin",
+	"RaidMixin",
+	"ResultSlotMixin",
+	"SheepMixin",
+	"TamableAnimalMixin"
+  ],
+  "client": [
+	"PauseScreenMixin"
+  ],
+  "server": [
+  ],
+  "injectors": {
+	"defaultRequire": 1
+  }
+}
