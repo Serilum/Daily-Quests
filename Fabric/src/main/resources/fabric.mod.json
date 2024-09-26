@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "dailyquests",
-  "version": "1.0",
+  "version": "1.1",
 
   "name": "Daily Quests",
   "description": "Completele randomly generated quests each day for experience and loot! Made for the 2024 CurseForge ModJam.",

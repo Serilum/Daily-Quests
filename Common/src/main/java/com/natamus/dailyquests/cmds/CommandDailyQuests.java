@@ -17,6 +17,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 
@@ -27,18 +28,50 @@ import java.util.UUID;
 public class CommandDailyQuests {
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
 		for (String commandPrefix : Constants.commandPrefixes) {
-			dispatcher.register(Commands.literal(commandPrefix).requires((iCommandSender) -> iCommandSender.hasPermission(2))
+			dispatcher.register(Commands.literal(commandPrefix)
+				.then(Commands.literal("info")
+				.executes((command) -> {
+					CommandSourceStack source = command.getSource();
+					ServerPlayer serverPlayer = source.getPlayer();
+					if (serverPlayer == null) {
+						MessageFunctions.sendMessage(source, "Only in-game players can use this command.", ChatFormatting.RED);
+						return 0;
+					}
+
+					UUID playerUUID = serverPlayer.getUUID();
+
+					int questsCompleted = 0;
+					int reRollsRemaining = ConfigHandler.maximumQuestReRollsPerDay;
+					if (Variables.playerDataMap.containsKey(playerUUID)) {
+						PlayerDataObject playerDataObject = Variables.playerDataMap.get(playerUUID);
+
+						questsCompleted = playerDataObject.getQuestsCompleted();
+						reRollsRemaining = playerDataObject.getReRollsLeft();
+					}
+
+					MessageFunctions.sendMessage(serverPlayer, Component.literal("Daily Quests Stats").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.GRAY), true);
+					MessageFunctions.sendMessage(serverPlayer, " > Quests completed: " + questsCompleted, ChatFormatting.GRAY);
+					MessageFunctions.sendMessage(serverPlayer, " > Re-rolls remaining: " + reRollsRemaining, ChatFormatting.GRAY);
+					return 1;
+				}))
+
 				.then(Commands.literal("debug")
 				.then(Commands.argument("target", EntityArgument.player())
 				.then(Commands.literal("generate")
 				.then(Commands.argument("count", IntegerArgumentType.integer(1, 5))
 				.executes((command) -> {
+					CommandSourceStack source = command.getSource();
+					if (!source.hasPermission(2)) {
+						MessageFunctions.sendMessage(source, "You do not have the permissions to use that command.", ChatFormatting.RED);
+						return 0;
+					}
+
 					ServerPlayer targetPlayer = EntityArgument.getPlayer(command, "target");
 					int count = IntegerArgumentType.getInteger(command, "count");
 
 					GenerateQuests.replaceAllPlayerQuests(targetPlayer.serverLevel(), targetPlayer, count);
 
-					MessageFunctions.sendMessage(command.getSource(), "All active player quests have been replaced.", ChatFormatting.GRAY, true);
+					MessageFunctions.sendMessage(source, "All active player quests have been replaced.", ChatFormatting.GRAY, true);
 					return 1;
 				})))))
 
@@ -48,6 +81,11 @@ public class CommandDailyQuests {
 				.then(Commands.argument("number", IntegerArgumentType.integer(1, 5))
 				.executes((command) -> {
 					CommandSourceStack source = command.getSource();
+					if (!source.hasPermission(2)) {
+						MessageFunctions.sendMessage(source, "You do not have the permissions to use that command.", ChatFormatting.RED);
+						return 0;
+					}
+
 					ServerPlayer targetPlayer = EntityArgument.getPlayer(command, "target");
 					UUID playerUUID = targetPlayer.getUUID();
 
@@ -79,6 +117,12 @@ public class CommandDailyQuests {
 				.then(Commands.argument("target", EntityArgument.player())
 				.then(Commands.literal("resetrerolls")
 				.executes((command) -> {
+					CommandSourceStack source = command.getSource();
+					if (!source.hasPermission(2)) {
+						MessageFunctions.sendMessage(source, "You do not have the permissions to use that command.", ChatFormatting.RED);
+						return 0;
+					}
+
 					ServerPlayer targetPlayer = EntityArgument.getPlayer(command, "target");
 					UUID playerUUID = targetPlayer.getUUID();
 
@@ -87,7 +131,7 @@ public class CommandDailyQuests {
 					Util.saveQuestDataPlayer(targetPlayer);
 					Util.sendQuestDataToClient(targetPlayer);
 
-					MessageFunctions.sendMessage(command.getSource(), targetPlayer.getName().getString() + "'s re-rolls have been reset.", ChatFormatting.GRAY, true);
+					MessageFunctions.sendMessage(source, targetPlayer.getName().getString() + "'s re-rolls have been reset.", ChatFormatting.GRAY, true);
 					return 1;
 				}))))
 
@@ -96,6 +140,12 @@ public class CommandDailyQuests {
 				.then(Commands.literal("questscompleted")
 				.then(Commands.argument("amount", IntegerArgumentType.integer(0, 1000))
 				.executes((command) -> {
+					CommandSourceStack source = command.getSource();
+					if (!source.hasPermission(2)) {
+						MessageFunctions.sendMessage(source, "You do not have the permissions to use that command.", ChatFormatting.RED);
+						return 0;
+					}
+
 					ServerPlayer targetPlayer = EntityArgument.getPlayer(command, "target");
 					int amount = IntegerArgumentType.getInteger(command, "amount");
 
@@ -109,7 +159,7 @@ public class CommandDailyQuests {
 					Util.saveQuestDataPlayer(targetPlayer);
 					Util.sendQuestDataToClient(targetPlayer);
 
-					MessageFunctions.sendMessage(command.getSource(), targetPlayer.getName().getString() + " now has " + amount + " completed quests!", ChatFormatting.GRAY, true);
+					MessageFunctions.sendMessage(source, targetPlayer.getName().getString() + " now has " + amount + " completed quests!", ChatFormatting.GRAY, true);
 					return 1;
 				})))))
 			);
