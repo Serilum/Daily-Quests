@@ -92,7 +92,7 @@ public class DailyQuestTrackEvents {
 			return;
 		}
 
-		CompleteQuests.updateQuestProgression(QuestWrapper.SLAY_MOB, level, serverPlayer, SlayMob.staticGetResourceLocationFromObject(level, livingEntity), 1);
+		CompleteQuests.updateQuestProgression(QuestWrapper.SLAY_MOB, level, serverPlayer, SlayMob.staticGetResourceLocationFromObject(level, livingEntity.getType()), 1);
 	}
 
 	public static void onSheepShear(Level level, Player player, Sheep sheep) {

@@ -10,7 +10,7 @@ import java.util.List;
 public class ConfigHandler extends DuskConfig {
 	public static HashMap<String, List<String>> configMetaData = new HashMap<String, List<String>>();
 
-	@Entry(min = 0, max = 24000) public static int newQuestGenerateTimeInTicks = 1000;
+	@Entry(min = 0, max = 24000) public static int newQuestGenerateTimeInTicks = 20;
 	@Entry(min = 1, max = 5) public static int defaultTotalQuestCount = 3;
 	@Entry(min = 0, max = 1000) public static int maximumQuestReRollsPerDay = 1;
 	@Entry public static boolean allowReRollingCompletedQuests = false;

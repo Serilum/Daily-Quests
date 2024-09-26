@@ -67,6 +67,10 @@ public class Util {
 			for (Ingredient ingredient : smeltingRecipe.getIngredients()) {
 				for (ItemStack itemStack : ingredient.getItems()) {
 					ResourceLocation ingredientIdentifier = itemRegistry.getKey(itemStack.getItem());
+					if (ingredientIdentifier.toString().contains("terracotta")) {
+						continue;
+					}
+
 					if (!Variables.smeltableItems.containsKey(resultIdentifier)) {
 						Variables.smeltableItems.put(resultIdentifier, new ArrayList<ResourceLocation>());
 					}

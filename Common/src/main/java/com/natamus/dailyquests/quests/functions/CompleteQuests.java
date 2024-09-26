@@ -63,6 +63,7 @@ public class CompleteQuests {
 			return;
 		}
 
+
 		if (quest.getIdentifier().equals(identifier) || forceEqual) {
 			if (quest.incrementCompletionCheck(count)) {
 				CompleteQuests.completeQuest((ServerLevel)level, serverPlayer, abstractQuest, quest);
