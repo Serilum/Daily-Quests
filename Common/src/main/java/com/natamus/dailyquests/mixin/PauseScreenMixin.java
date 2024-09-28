@@ -2,6 +2,7 @@ package com.natamus.dailyquests.mixin;
 
 import com.natamus.dailyquests.data.VariablesClient;
 import com.natamus.dailyquests.events.DailyQuestsClientEvents;
+import com.natamus.dailyquests.util.UtilClient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -13,8 +14,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.LinkedHashMap;
-
 @Mixin(value = PauseScreen.class, priority = 1001)
 public abstract class PauseScreenMixin extends Screen {
 	protected PauseScreenMixin(Component component) {
@@ -23,8 +22,7 @@ public abstract class PauseScreenMixin extends Screen {
 
 	@Inject(method = "createPauseMenu()V", at = @At(value = "TAIL"))
 	private void createPauseMenu(CallbackInfo ci) {
-		VariablesClient.reRollButtons = new LinkedHashMap<>();
-		VariablesClient.addedRerollButtons = false;
+		UtilClient.resetReRollButtons();
 	}
 
 	@Inject(method = "render(Lnet/minecraft/client/gui/GuiGraphics;IIF)V", at = @At(value = "TAIL"))

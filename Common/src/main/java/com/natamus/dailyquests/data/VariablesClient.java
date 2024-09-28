@@ -14,9 +14,11 @@ public class VariablesClient {
 	public static List<String> questDescriptions = new ArrayList<>();
 	public static List<Pair<Integer, Integer>> questProgress = new ArrayList<>();
 
-	public static boolean questListCollapsed = false; // TODO: config
+	public static boolean questListCollapsed = false;
 
 	public static LinkedHashMap<Integer, Button> reRollButtons = new LinkedHashMap<>();
 	public static boolean addedRerollButtons = false;
 	public static boolean waitingForNewQuest = false;
+
+	public static boolean lowerForBedrockifySaving = false;
 }

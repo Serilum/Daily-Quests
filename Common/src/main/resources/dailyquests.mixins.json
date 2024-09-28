@@ -13,6 +13,7 @@
 	"FurnaceMixin",
 	"GhastMixin",
 	"LivingEntityMixin",
+	"MinecraftServerMixin",
 	"PlayerMixin",
 	"RaidMixin",
 	"ResultSlotMixin",

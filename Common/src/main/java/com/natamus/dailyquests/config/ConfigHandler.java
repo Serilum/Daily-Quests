@@ -27,6 +27,7 @@ public class ConfigHandler extends DuskConfig {
 	@Entry(min = 0, max = 3000) public static int questListVerticalOffset = 5;
 	@Entry(min = -3000, max = 3000) public static int questListHorizontalOffset = 0;
 	@Entry public static boolean lowerQuestListWhenPlayerHasEffects = true;
+	@Entry public static boolean lowerQuestListWhenBedrockifyModSaves = true;
 
 	@Entry public static boolean enableBlockArrowQuests = true;
 	@Entry public static boolean enableBreedMobQuests = true;
@@ -100,6 +101,9 @@ public class ConfigHandler extends DuskConfig {
 		));
 		configMetaData.put("lowerQuestListWhenPlayerHasEffects", Arrays.asList(
 			"Whether the quest list in the GUI should be lowered when the player has potion effects to prevent overlap."
+		));
+		configMetaData.put("lowerQuestListWhenBedrockifyModSaves", Arrays.asList(
+			"Whether the quest list in the GUI should be lowered when bedrockify is installed and the game is saving."
 		));
 
 		configMetaData.put("enableBlockArrowQuests", Arrays.asList(

@@ -6,7 +6,7 @@ logoFile="icon.png"
 
 [[mods]]
 modId="dailyquests"
-version="1.3"
+version="1.4"
 displayName="Daily Quests"
 displayURL="https://serilum.com/mod/daily-quests"
 authors="Rick South"
@@ -14,7 +14,7 @@ description='''Complete randomly generated quests each day for experience and lo
 '''
 credits='''Thank you very much to my Membership sponsors for supporting the development of this mod:  
 
-Alister, Andrean Olgo, aternosorg, Cherriesaurus, Michael W. S., Nahuel Fernandez, Shana Gitnick, Tyler Behl   
+Alister, Andrean Olgo, aternosorg, Cherriesaurus, kate1073, Michael W. S., Tyler Behl, XAgent   
 
 If you would like to contribute too, check out https://serilum.com/donate. Appreciate it! <3   
 '''

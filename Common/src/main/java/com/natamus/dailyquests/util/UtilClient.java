@@ -15,6 +15,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 
 public class UtilClient {
 	public static void addRerollButton(PauseScreen pauseScreen, int questNumber, int xPosition, int yPosition) {
@@ -47,7 +48,18 @@ public class UtilClient {
 		}
 	}
 
+	public static void resetReRollButtons() {
+		VariablesClient.reRollButtons.values().forEach(button -> button.visible = false);
+
+		VariablesClient.reRollButtons = new LinkedHashMap<>();
+		VariablesClient.addedRerollButtons = false;
+	}
+
 	public static int getExtraEffectHeightOffset() {
+		if (VariablesClient.lowerForBedrockifySaving) {
+			return 50;
+		}
+
 		if (ConfigHandler.lowerQuestListWhenPlayerHasEffects) {
 			Collection<MobEffectInstance> activeeffects = ConstantsClient.mc.player.getActiveEffects();
 			if (activeeffects.size() > 0) {
@@ -76,6 +88,7 @@ public class UtilClient {
 				}
 			}
 		}
+
 		return 0;
 	}
 

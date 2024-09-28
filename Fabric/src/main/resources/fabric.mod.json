@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "dailyquests",
-  "version": "1.3",
+  "version": "1.4",
 
   "name": "Daily Quests",
   "description": "Complete randomly generated quests each day for experience and loot! Made for the 2024 CurseForge ModJam.",
@@ -48,9 +48,9 @@
 	  " Andrean Olgo",
 	  " aternosorg",
 	  " Cherriesaurus",
+	  " kate1073",
 	  " Michael W. S.",
-	  " Nahuel Fernandez",
-	  " Shana Gitnick",
-	  " Tyler Behl"
+	  " Tyler Behl",
+	  " XAgent"
   ]
 }
