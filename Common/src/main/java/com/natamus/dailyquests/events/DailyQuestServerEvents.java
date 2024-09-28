@@ -41,6 +41,12 @@ public class DailyQuestServerEvents {
 			return;
 		}
 
-		Util.loadQuestDataPlayer((ServerPlayer)entity);
+		ServerPlayer serverPlayer = (ServerPlayer)entity;
+		if (!Util.hasQuestData(serverPlayer)) {
+			GenerateQuests.replaceAllPlayerQuests(serverPlayer.serverLevel(), serverPlayer, ConfigHandler.defaultTotalQuestCount);
+			return;
+		}
+
+		Util.loadQuestDataPlayer(serverPlayer);
 	}
 }

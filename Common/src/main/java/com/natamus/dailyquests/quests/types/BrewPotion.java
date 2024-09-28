@@ -45,7 +45,8 @@ public class BrewPotion extends AbstractQuest {
 
 	@Override
 	public boolean isAllowedIdentifier(Level level, ResourceLocation identifier) {
-		return !identifier.toString().contains("strong_");
+		String stringIdentifier = identifier.toString();
+		return !stringIdentifier.contains("strong_") && !stringIdentifier.contains("long_") && !stringIdentifier.endsWith("luck");
 	}
 
 	@Override @Nullable

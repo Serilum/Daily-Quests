@@ -2,6 +2,8 @@ package com.natamus.dailyquests.mixin;
 
 import com.natamus.dailyquests.events.DailyQuestTrackEvents;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -17,5 +19,15 @@ public class PlayerMixin {
 		}
 
 		DailyQuestTrackEvents.onGainExperienceLevel(player.level(), player, levelCount);
+	}
+
+	@Inject(method = "hurtCurrentlyUsedShield(F)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;awardStat(Lnet/minecraft/stats/Stat;)V"))
+	protected void hurtCurrentlyUsedShield(float f, CallbackInfo ci) {
+		Player player = (Player)(Object)this;
+		if (player == null) {
+			return;
+		}
+
+		DailyQuestTrackEvents.onItemUseFinished(player.level(), player, new ItemStack(Items.SHIELD));
 	}
 }

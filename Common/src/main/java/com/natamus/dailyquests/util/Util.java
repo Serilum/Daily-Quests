@@ -245,7 +245,7 @@ public class Util {
 		Dispatcher.sendToClient(new ToClientSendQuestsPacket(dataEntries, questTitles, questDescriptions, questProgress), serverPlayer);
 	}
 
-	private static boolean hasQuestData(Player player) {
+	public static boolean hasQuestData(Player player) {
 		for (String tag : player.getTags()) {
 			if (tag.startsWith(Constants.tagPrefix)) {
 				return true;

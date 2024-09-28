@@ -6,7 +6,7 @@ logoFile="icon.png"
 
 [[mods]]
 modId="dailyquests"
-version="1.4"
+version="1.5"
 displayName="Daily Quests"
 displayURL="https://serilum.com/mod/daily-quests"
 authors="Rick South"
