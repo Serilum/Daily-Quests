@@ -49,7 +49,12 @@ public class CompleteQuests {
 			return false;
 		}
 
-		return !Variables.playerQuestDataMap.get(playerUUID).get(abstractQuest).isCompleted();
+		QuestObject quest = Variables.playerQuestDataMap.get(playerUUID).get(abstractQuest);
+		if (quest == null) {
+			return false;
+		}
+
+		return !quest.isCompleted();
 	}
 	public static void updateQuestProgression(QuestWrapper<?> wrappedQuestType, Level level, ServerPlayer serverPlayer, ResourceLocation identifier, int count) {
 		updateQuestProgression(wrappedQuestType, level, serverPlayer, identifier, count, false);
@@ -82,7 +87,7 @@ public class CompleteQuests {
 
 		int questsCompleted;
 		if (!Variables.playerDataMap.containsKey(playerUUID)) {
-			Variables.playerDataMap.put(playerUUID, new PlayerDataObject(playerUUID, ConfigHandler.maximumQuestReRollsPerDay, 1));
+			Variables.playerDataMap.put(playerUUID, new PlayerDataObject(playerUUID, ConfigHandler.maximumQuestReRollsPerDay, 1, false));
 
 			questsCompleted = 1;
 		}

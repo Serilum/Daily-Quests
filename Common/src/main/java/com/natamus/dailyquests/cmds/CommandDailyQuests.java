@@ -154,7 +154,7 @@ public class CommandDailyQuests {
 
 					UUID playerUUID = targetPlayer.getUUID();
 					if (!Variables.playerDataMap.containsKey(playerUUID)) {
-						Variables.playerDataMap.put(playerUUID, new PlayerDataObject(playerUUID, ConfigHandler.maximumQuestReRollsPerDay, amount));
+						Variables.playerDataMap.put(playerUUID, new PlayerDataObject(playerUUID, ConfigHandler.maximumQuestReRollsPerDay, amount, false));
 					}
 
 					Variables.playerDataMap.get(playerUUID).setQuestsCompleted(amount);

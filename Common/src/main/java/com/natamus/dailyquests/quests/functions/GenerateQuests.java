@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import com.natamus.dailyquests.config.ConfigHandler;
 import com.natamus.dailyquests.data.Constants;
 import com.natamus.dailyquests.data.Variables;
+import com.natamus.dailyquests.quests.object.PlayerDataObject;
 import com.natamus.dailyquests.quests.object.QuestObject;
 import com.natamus.dailyquests.quests.types.main.AbstractQuest;
 import com.natamus.dailyquests.quests.types.main.QuestWrapper;
@@ -17,8 +18,34 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class GenerateQuests {
+	public static void setInitialQuestScreen(ServerLevel serverLevel, ServerPlayer serverPlayer) {
+		if (!ConfigHandler.showQuestIntroductionScreenFirstLogin) {
+			GenerateQuests.replaceAllPlayerQuests(serverLevel, serverPlayer, ConfigHandler.defaultTotalQuestCount);
+			return;
+		}
+
+		UUID playerUUID = serverPlayer.getUUID();
+
+		PlayerDataObject playerDataObject = new PlayerDataObject(playerUUID, true);
+
+		LinkedHashMap<AbstractQuest, QuestObject> quests = new LinkedHashMap<>();
+		for (AbstractQuest abstractQuest : getRandomQuestTypes(Set.of(), ConfigHandler.defaultTotalQuestCount)) {
+			quests.put(abstractQuest, null);
+		}
+
+		Variables.playerDataMap.put(playerUUID, playerDataObject);
+		Variables.playerQuestDataMap.put(playerUUID, quests);
+
+		Util.saveQuestDataPlayer(serverPlayer);
+		Util.sendQuestDataToClient(serverPlayer);
+	}
+
 	public static void replaceFinishedPlayerQuests(ServerLevel serverLevel) {
 		for (ServerPlayer serverPlayer : serverLevel.players()) {
+			if (serverPlayer.tickCount < ConfigHandler.newQuestGenerateTimeInTicks + 1) {
+				continue;
+			}
+
 			UUID playerUUID = serverPlayer.getUUID();
 			if (!Variables.playerQuestDataMap.containsKey(playerUUID)) {
 				replaceAllPlayerQuests(serverLevel, serverPlayer, ConfigHandler.defaultTotalQuestCount);
@@ -27,14 +54,18 @@ public class GenerateQuests {
 
 			List<Integer> questsToReplace = new ArrayList<>();
 
-			int questNumber = 1;
+			int questNumber = 0;
 			LinkedHashMap<AbstractQuest, QuestObject> quests = Variables.playerQuestDataMap.get(playerUUID);
 			for (QuestObject quest : quests.values()) {
-				if (quest.isCompleted()) {
-					questsToReplace.add(questNumber);
+				questNumber += 1;
+
+				if (quest != null) {
+					if (!quest.isCompleted()) {
+						continue;
+					}
 				}
 
-				questNumber += 1;
+				questsToReplace.add(questNumber);
 			}
 
 			if (!questsToReplace.isEmpty()) {
@@ -74,8 +105,11 @@ public class GenerateQuests {
 			quests.put(questObject.getType(), questObject);
 		}
 
+		if (Variables.playerDataMap.get(playerUUID).isShowingIntroduction()) {
+			Variables.playerDataMap.get(playerUUID).setShowingIntroduction(false);
+		}
 
-		Variables.playerQuestDataMap.put(serverPlayer.getUUID(), quests);
+		Variables.playerQuestDataMap.put(playerUUID, quests);
 
 		Util.saveQuestDataPlayer(serverPlayer, quests);
 		Util.sendQuestDataToClient(serverPlayer);

@@ -10,6 +10,10 @@ import java.util.List;
 public class ConfigHandler extends DuskConfig {
 	public static HashMap<String, List<String>> configMetaData = new HashMap<String, List<String>>();
 
+	@Entry public static boolean showQuestIntroductionScreenFirstLogin = true;
+	@Entry public static String introductionQuestScreenTitles = "Daily Quests|Collapse List|Getting Started";
+	@Entry public static String introductionQuestScreenDescriptions = "Introduction.|Press the . key to collapse this list.|Receive your first %questcount% quests next in-game morning!";
+
 	@Entry(min = 0, max = 24000) public static int newQuestGenerateTimeInTicks = 20;
 	@Entry(min = 1, max = 5) public static int defaultTotalQuestCount = 3;
 	@Entry(min = 0, max = 1000) public static int maximumQuestReRollsPerDay = 1;
@@ -52,6 +56,16 @@ public class ConfigHandler extends DuskConfig {
 	@Entry public static boolean enableUseItemQuests = true;
 
 	public static void initConfig() {
+		configMetaData.put("showQuestIntroductionScreenFirstLogin", Arrays.asList(
+			"If an introduction to daily quests should be shown in the quest list area on the first day."
+		));
+		configMetaData.put("introductionQuestScreenTitles", Arrays.asList(
+			"The green titles of the introduction screen. Each title is split by the | symbol."
+		));
+		configMetaData.put("introductionQuestScreenDescriptions", Arrays.asList(
+			"The yellow descriptions of the introduction screen. Each description is split by the | symbol."
+		));
+
 		configMetaData.put("newQuestGenerateTimeInTicks", Arrays.asList(
 			"At what time new quests should generate. Default is day, at 1000 ticks."
 		));

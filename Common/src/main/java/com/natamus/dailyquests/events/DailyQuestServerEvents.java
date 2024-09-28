@@ -43,7 +43,7 @@ public class DailyQuestServerEvents {
 
 		ServerPlayer serverPlayer = (ServerPlayer)entity;
 		if (!Util.hasQuestData(serverPlayer)) {
-			GenerateQuests.replaceAllPlayerQuests(serverPlayer.serverLevel(), serverPlayer, ConfigHandler.defaultTotalQuestCount);
+			GenerateQuests.setInitialQuestScreen(serverPlayer.serverLevel(), serverPlayer);
 			return;
 		}
 

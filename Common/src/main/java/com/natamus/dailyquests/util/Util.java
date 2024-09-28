@@ -142,7 +142,7 @@ public class Util {
 	public static void saveQuestDataPlayer(Player player, LinkedHashMap<AbstractQuest, QuestObject> quests) {
 		UUID playerUUID = player.getUUID();
 		if (!Variables.playerDataMap.containsKey(playerUUID)) {
-			Variables.playerDataMap.put(playerUUID, new PlayerDataObject(playerUUID));
+			Variables.playerDataMap.put(playerUUID, new PlayerDataObject(playerUUID, false));
 		}
 
 		player.getTags().removeIf(currentTag -> currentTag.startsWith(Constants.tagPrefix));
@@ -152,6 +152,10 @@ public class Util {
 		tag.append(Constants.tagMainDelimiter).append(Variables.playerDataMap.get(playerUUID).getRawDataTag());
 
 		for (QuestObject quest : quests.values()) {
+			if (quest == null) {
+				continue;
+			}
+
 			tag.append(Constants.tagMainDelimiter).append(quest.getRawDataTag());
 		}
 
@@ -166,8 +170,14 @@ public class Util {
 			questData = Pair.of(Variables.playerDataMap.get(playerUUID), Variables.playerQuestDataMap.get(playerUUID));
 		}
 		else {
+			boolean isOnIntroduction = false;
+
 			questData = getQuestDataOfPlayer(serverPlayer);
-			if (questData.getFirst() == null || questData.getSecond().isEmpty()) {
+			if (questData.getFirst() != null) {
+				isOnIntroduction = questData.getFirst().isShowingIntroduction();
+			}
+
+			if (questData.getFirst() == null || (questData.getSecond().isEmpty() && !isOnIntroduction)) {
 				if (hasQuestData(serverPlayer)) {
 					Constants.logger.warn("[" + Reference.NAME + "] Unable to load quest data for player " + serverPlayer.getName().getString() + ". (loadQuestDataPlayer)");
 				}
@@ -213,7 +223,7 @@ public class Util {
 		}
 
 		if (playerDataObject == null) {
-			playerDataObject = new PlayerDataObject(playerUUID);
+			playerDataObject = new PlayerDataObject(playerUUID, false);
 		}
 
 		return Pair.of(playerDataObject, quests);
@@ -232,6 +242,13 @@ public class Util {
 		List<Pair<Integer, Integer>> questProgress = new ArrayList<>();
 
 		for (QuestObject quest : questData.getSecond().values()) {
+			if (quest == null) {
+				questTitles.add("");
+				questDescriptions.add("");
+				questProgress.add(Pair.of(0, 0));
+				continue;
+			}
+
 			Triplet<String, String, Pair<Integer, Integer>> clientQuestData = quest.getClientQuestData(serverLevel);
 			if (clientQuestData == null) {
 				continue;

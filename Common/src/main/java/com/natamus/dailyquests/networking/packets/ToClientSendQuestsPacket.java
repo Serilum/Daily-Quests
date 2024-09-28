@@ -6,6 +6,7 @@ import com.natamus.collective.implementations.networking.data.Side;
 import com.natamus.dailyquests.data.VariablesClient;
 import com.natamus.dailyquests.quests.object.PlayerDataObject;
 import com.natamus.dailyquests.util.Reference;
+import com.natamus.dailyquests.util.UtilClient;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -52,10 +53,14 @@ public class ToClientSendQuestsPacket {
 
     public static void handle(PacketContext<ToClientSendQuestsPacket> ctx) {
         if (ctx.side().equals(Side.CLIENT)) {
-
             PlayerDataObject previousPlayerDataObject = VariablesClient.playerDataObject;
 
-            VariablesClient.playerDataObject = new PlayerDataObject(new UUID(0, 0), dataEntries);
+            VariablesClient.playerDataObject = new PlayerDataObject(UUID.randomUUID(), dataEntries);
+            if (VariablesClient.playerDataObject.isShowingIntroduction()) {
+                UtilClient.showDailyQuestsIntroduction(questTitles.size());
+                return;
+            }
+
             VariablesClient.questTitles = questTitles;
             VariablesClient.questDescriptions = questDescriptions;
             VariablesClient.questProgress = questProgress;

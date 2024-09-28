@@ -89,20 +89,22 @@ public class DailyQuestsClientEvents {
 			}
 		}
 
-		int questCount = VariablesClient.questTitles.size();
+		int questCount = Math.max(VariablesClient.questTitles.size(), VariablesClient.questDescriptions.size());;
 		List<QuestVarGUI> elementsToDraw = new ArrayList<>();
 		for (int n = 0; n < questCount; n++) {
-			Pair<Integer, Integer> questProgressPair = VariablesClient.questProgress.get(n);
+			Pair<Integer, Integer> questProgressPair = (VariablesClient.questProgress.size() > n)
+				? VariablesClient.questProgress.get(n)
+				: Pair.of(0, 0);
 
-			String questTitle = VariablesClient.questTitles.get(n);
-			String questDescription = VariablesClient.questDescriptions.get(n);
+			String questTitle = (n < VariablesClient.questTitles.size()) ? VariablesClient.questTitles.get(n) : "";
+			String questDescription = (n < VariablesClient.questDescriptions.size()) ? VariablesClient.questDescriptions.get(n) : "";
 
 			if (!VariablesClient.questListCollapsed) {
 				elementsToDraw.add(new QuestVarGUI(Component.literal(questTitle), null, questProgressPair, xPosition, yPosition, ConstantsClient.questTitleRGB, 0.8F));
 				yPosition += 11;
 
 				if (!questDescription.isEmpty()) {
-					List<FormattedCharSequence> descriptionLines = ComponentRenderUtils.wrapComponents(Component.literal(questDescription), 100, font);
+					List<FormattedCharSequence> descriptionLines = ComponentRenderUtils.wrapComponents(Component.literal(questDescription), 95, font);
 					for (FormattedCharSequence line : descriptionLines) {
 						elementsToDraw.add(new QuestVarGUI(null, line, null, (int) (xPosition * 1.25) + 5, (int) (yPosition * 1.25), ConstantsClient.questDescriptionRGB, 0F));
 						yPosition += 9;
@@ -140,22 +142,28 @@ public class DailyQuestsClientEvents {
 
 				guiGraphics.fill(xPosition + xOffset - 5, initialY - 5, xPosition + xOffset - 5 + progressWidth, yPosition + 15, ConstantsClient.questProgressBarGreenRGB);
 
+				int progressTextYOffset = 0;
 				int progressTextXOffset = 0;
 				String progressText;
-				if (goal > 1) {
-					progressText = (int) Math.floor(((double) progress / (double) goal) * 100) + "%";
-				} else {
-					if (progress != goal) {
-						progressText = "x";
-					}
-					else {
-						progressText = "✔";
-						progressTextXOffset = 1;
+				if (VariablesClient.playerDataObject.isShowingIntroduction()) {
+					progressText = "~";
+					progressTextYOffset = 3;
+				}
+				else {
+					if (goal > 1) {
+						progressText = (int) Math.floor(((double) progress / (double) goal) * 100) + "%";
+					} else {
+						if (progress != goal) {
+							progressText = "x";
+						} else {
+							progressText = "✔";
+							progressTextXOffset = 1;
+						}
 					}
 				}
 
 				int textXPosition = xPosition + xOffset - progressTextXOffset - 5 + (collapsedWidth / 2) - (font.width(progressText) / 2);
-				guiGraphics.drawString(font, Component.literal(progressText), textXPosition, initialY + 1, 0xFFFFFFFF, ConfigHandler.questListDrawTextShadow);
+				guiGraphics.drawString(font, Component.literal(progressText), textXPosition, initialY + 1 + progressTextYOffset, 0xFFFFFFFF, ConfigHandler.questListDrawTextShadow);
 			}
 		}
 
@@ -184,16 +192,16 @@ public class DailyQuestsClientEvents {
 			if (questText.textComponent != null) {
 				guiGraphics.drawString(font, questText.textComponent, questText.xPosition, questText.yPosition, questText.rgb, ConfigHandler.questListDrawTextShadow);
 
+				if (!VariablesClient.playerDataObject.isShowingIntroduction()) {
+					if (!questText.questProgressPair.getFirst().equals(questText.questProgressPair.getSecond())) {
+						guiGraphics.drawString(font, "x", width - 15, questText.yPosition - 1, ConstantsClient.questProgressBarRedRGB, ConfigHandler.questListDrawTextShadow);
+					} else {
+						guiGraphics.drawString(font, "✔", width - 15, questText.yPosition - 1, ConstantsClient.questTitleRGB, ConfigHandler.questListDrawTextShadow);
+					}
 
-				if (!questText.questProgressPair.getFirst().equals(questText.questProgressPair.getSecond())) {
-					guiGraphics.drawString(font, "x", width - 15, questText.yPosition-1, ConstantsClient.questProgressBarRedRGB, ConfigHandler.questListDrawTextShadow);
-				}
-				else {
-					guiGraphics.drawString(font, "✔", width - 15, questText.yPosition-1, ConstantsClient.questTitleRGB, ConfigHandler.questListDrawTextShadow);
-				}
-
-				if (pauseScreen != null) {
-					UtilClient.addRerollButton(pauseScreen, questNum, questText.xPosition, questText.yPosition);
+					if (pauseScreen != null) {
+						UtilClient.addRerollButton(pauseScreen, questNum, questText.xPosition, questText.yPosition);
+					}
 				}
 
 				questNum += 1;

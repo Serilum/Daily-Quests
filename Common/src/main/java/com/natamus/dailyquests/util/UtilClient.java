@@ -14,11 +14,24 @@ import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 
 public class UtilClient {
+	public static void showDailyQuestsIntroduction(int questCount) {
+		VariablesClient.questTitles = Arrays.asList(ConfigHandler.introductionQuestScreenTitles.split("\\|"));
+		VariablesClient.questDescriptions = Arrays.asList(ConfigHandler.introductionQuestScreenDescriptions.replace("%questcount%", questCount + "").split("\\|"));
+		VariablesClient.questProgress = new ArrayList<>();
+
+		VariablesClient.waitingForNewQuest = false;
+	}
+
 	public static void addRerollButton(PauseScreen pauseScreen, int questNumber, int xPosition, int yPosition) {
+		if (VariablesClient.playerDataObject.isShowingIntroduction()) {
+			return;
+		}
+
 		if (VariablesClient.addedRerollButtons) {
 			return;
 		}
