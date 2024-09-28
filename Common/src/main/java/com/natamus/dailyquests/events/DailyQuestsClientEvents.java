@@ -42,6 +42,10 @@ public class DailyQuestsClientEvents {
 	}
 
 	public static void renderOverlay(GuiGraphics guiGraphics, @Nullable DeltaTracker deltaTracker, @Nullable PauseScreen pauseScreen) {
+		if (ConfigHandler.disableGUIQuestListEntirely) {
+			return;
+		}
+
 		if (pauseScreen != null && deltaTracker != null) {
 			return;
 		}

@@ -55,6 +55,47 @@ public class CommandDailyQuests {
 					MessageFunctions.sendMessage(serverPlayer, Component.literal("Daily Quests Stats").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.GRAY), true);
 					MessageFunctions.sendMessage(serverPlayer, " > Quests completed: " + questsCompleted, ChatFormatting.GRAY);
 					MessageFunctions.sendMessage(serverPlayer, " > Re-rolls remaining: " + reRollsRemaining, ChatFormatting.GRAY);
+
+					MessageFunctions.sendMessage(serverPlayer, "To see your quests, use /dq quests", ChatFormatting.DARK_GREEN, true);
+					return 1;
+				}))
+
+				.then(Commands.literal("quests")
+				.executes((command) -> {
+					CommandSourceStack source = command.getSource();
+					ServerPlayer serverPlayer = source.getPlayer();
+					if (serverPlayer == null) {
+						MessageFunctions.sendMessage(source, "Only in-game players can use this command.", ChatFormatting.RED);
+						return 0;
+					}
+
+					UUID playerUUID = serverPlayer.getUUID();
+					if (!Variables.playerQuestDataMap.containsKey(playerUUID)) {
+						MessageFunctions.sendMessage(serverPlayer, "Unable to find quest data.", ChatFormatting.RED);
+						return 0;
+					}
+
+					ServerLevel serverLevel = serverPlayer.serverLevel();
+
+					MessageFunctions.sendMessage(serverPlayer, Component.literal(serverPlayer.getName().getString() + " Quests").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.GRAY), true);
+
+					LinkedHashMap<AbstractQuest, QuestObject> quests = Variables.playerQuestDataMap.get(playerUUID);
+					for (QuestObject quest : quests.values()) {
+						if (quest == null) {
+							continue;
+						}
+
+						String questDescription = quest.getQuestDescription(serverLevel);
+						if (!questDescription.isBlank()) {
+							questDescription = " " + questDescription + ",";
+						}
+
+						String questProgress = quest.getCurrentProgress() + " / " + quest.getGoalProgress();
+
+						MessageFunctions.sendMessage(serverPlayer, " > " + quest.getQuestTitle(serverLevel) + ":" + questDescription + " " + questProgress , ChatFormatting.GRAY);
+					}
+
+					MessageFunctions.sendMessage(serverPlayer, "To see your quest stats, use /dq info", ChatFormatting.DARK_GREEN, true);
 					return 1;
 				}))
 
