@@ -11,6 +11,7 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.UUID;
@@ -31,14 +32,19 @@ public class ToClientSendQuestsPacket {
     }
 
     public static ToClientSendQuestsPacket decode(FriendlyByteBuf buf) {
-        List<Integer> dataEntriesIn = buf.readList(bufIn -> bufIn.readInt());
-        List<String> questTitlesIn = buf.readList(bufIn -> bufIn.readUtf(32767));
-        List<String> questDescriptionsIn = buf.readList(bufIn -> bufIn.readUtf(32767));
-        List<Pair<Integer, Integer>> questProgressIn = buf.readList(buffer -> {
-            return Pair.of(buffer.readInt(), buffer.readInt());
-        });
+        try {
+            List<Integer> dataEntriesIn = buf.readList(bufIn -> bufIn.readInt());
+            List<String> questTitlesIn = buf.readList(bufIn -> bufIn.readUtf(32767));
+            List<String> questDescriptionsIn = buf.readList(bufIn -> bufIn.readUtf(32767));
+            List<Pair<Integer, Integer>> questProgressIn = buf.readList(buffer -> {
+                return Pair.of(buffer.readInt(), buffer.readInt());
+            });
 
-        return new ToClientSendQuestsPacket(dataEntriesIn, questTitlesIn, questDescriptionsIn, questProgressIn);
+            return new ToClientSendQuestsPacket(dataEntriesIn, questTitlesIn, questDescriptionsIn, questProgressIn);
+        }
+        catch (IndexOutOfBoundsException ex) {
+            return new ToClientSendQuestsPacket(new ArrayList<Integer>(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<Pair<Integer, Integer>>());
+        }
     }
 
     public void encode(FriendlyByteBuf buf) {

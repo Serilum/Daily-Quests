@@ -126,10 +126,13 @@ public class Util {
 
 
 		for (EntityType<?> entityType : entityTypeRegistry) {
-			Entity entity = entityType.create(level);
-			if (entity instanceof Animal) {
-				Variables.breedableMobs.add(entityTypeRegistry.getKey(entityType));
+			try {
+				Entity entity = entityType.create(level);
+				if (entity instanceof Animal) {
+					Variables.breedableMobs.add(entityTypeRegistry.getKey(entityType));
+				}
 			}
+			catch (NullPointerException ignored) { }
 		}
 
 
