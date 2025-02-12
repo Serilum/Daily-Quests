@@ -28,7 +28,7 @@ public class ModForge {
 		IEventBus modEventBus = modLoadingContext.getModEventBus();
 
 		modEventBus.addListener(this::loadComplete);
-		modEventBus.register(new ForgeDailyQuestHotkeyEvents());
+		modEventBus.register(ForgeDailyQuestHotkeyEvents.class);
 
 		setGlobalConstants();
 		ModCommon.init();
@@ -40,11 +40,11 @@ public class ModForge {
 
 	private void loadComplete(final FMLLoadCompleteEvent event) {
 		if (FMLEnvironment.dist.equals(Dist.CLIENT)) {
-			MinecraftForge.EVENT_BUS.register(new ForgeDailyQuestClientEvents());
+			MinecraftForge.EVENT_BUS.register(ForgeDailyQuestClientEvents.class);
 		}
 
-    	MinecraftForge.EVENT_BUS.register(new ForgeDailyQuestServerEvents());
-		MinecraftForge.EVENT_BUS.register(new ForgeDailyQuestTrackEvents());
+    	MinecraftForge.EVENT_BUS.register(ForgeDailyQuestServerEvents.class);
+		MinecraftForge.EVENT_BUS.register(ForgeDailyQuestTrackEvents.class);
 	}
 
 	private static void setGlobalConstants() {
