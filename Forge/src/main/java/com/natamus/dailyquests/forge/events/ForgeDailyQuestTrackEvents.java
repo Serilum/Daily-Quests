@@ -12,12 +12,10 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
-@EventBusSubscriber
 public class ForgeDailyQuestTrackEvents {
 	@SubscribeEvent
-	public void onPlayerTick(TickEvent.PlayerTickEvent e) {
+	public static void onPlayerTick(TickEvent.PlayerTickEvent e) {
 		if (e.phase.equals(TickEvent.Phase.START)) {
 			return;
 		}
@@ -27,7 +25,7 @@ public class ForgeDailyQuestTrackEvents {
 	}
 
 	@SubscribeEvent
-	public void onBlockBreak(BlockEvent.BreakEvent e) {
+	public static void onBlockBreak(BlockEvent.BreakEvent e) {
 		Level level = WorldFunctions.getWorldIfInstanceOfAndNotRemote(e.getLevel());
 		if (level == null) {
 			return;
@@ -37,19 +35,19 @@ public class ForgeDailyQuestTrackEvents {
 	}
 
 	@SubscribeEvent
-	public void onPlayerDeath(LivingDeathEvent e) {
+	public static void onPlayerDeath(LivingDeathEvent e) {
 		LivingEntity livingEntity = e.getEntity();
 		DailyQuestTrackEvents.onLivingDeath(livingEntity.level(), livingEntity, e.getSource());
 	}
 
 	@SubscribeEvent
-	public void onBaby(BabyEntitySpawnEvent e) {
+	public static void onBaby(BabyEntitySpawnEvent e) {
 		AgeableMob child = e.getChild();
 		DailyQuestTrackEvents.onBreeding(child.level(), e.getCausedByPlayer(), e.getParentA(), e.getParentB(), child);
 	}
 
 	@SubscribeEvent
-	public void onDrink(LivingEntityUseItemEvent.Finish e) {
+	public static void onDrink(LivingEntityUseItemEvent.Finish e) {
 		LivingEntity livingEntity = e.getEntity();
 		if (!(livingEntity instanceof Player)) {
 			return;

@@ -4,11 +4,9 @@ import com.natamus.dailyquests.data.ConstantsClient;
 import com.natamus.dailyquests.events.DailyQuestsClientEvents;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
 
-@EventBusSubscriber(Dist.CLIENT)
 public class NeoForgeDailyQuestClientEvents {
 	@SubscribeEvent
 	public static void onClientTick(ClientTickEvent.Pre e) {

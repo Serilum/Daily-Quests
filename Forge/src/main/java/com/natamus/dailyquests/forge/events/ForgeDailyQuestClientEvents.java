@@ -6,12 +6,10 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
-@EventBusSubscriber(Dist.CLIENT)
 public class ForgeDailyQuestClientEvents {
 	@SubscribeEvent
-	public void onClientTick(TickEvent.ClientTickEvent e) {
+	public static void onClientTick(TickEvent.ClientTickEvent e) {
 		if (!e.phase.equals(TickEvent.Phase.START)) {
 			return;
 		}
@@ -20,7 +18,7 @@ public class ForgeDailyQuestClientEvents {
 	}
 
 	@SubscribeEvent
-	public void onKey(InputEvent.Key e) {
+	public static void onKey(InputEvent.Key e) {
 		if (e.getAction() != 1) {
 			return;
 		}
