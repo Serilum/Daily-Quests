@@ -19,10 +19,10 @@ import java.util.UUID;
 public class ToServerAttemptReRollQuest {
     public static final ResourceLocation CHANNEL = ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "to_server_attempt_re_roll_quest");
 
-    private static int questNumber;
+    private final int questNumber;
 
     public ToServerAttemptReRollQuest(int questNumberIn) {
-        questNumber = questNumberIn;
+        this.questNumber = questNumberIn;
     }
 
     public static ToServerAttemptReRollQuest decode(FriendlyByteBuf buf) {
@@ -37,6 +37,7 @@ public class ToServerAttemptReRollQuest {
 
     public static void handle(PacketContext<ToServerAttemptReRollQuest> ctx) {
         if (ctx.side().equals(Side.SERVER)) {
+            ToServerAttemptReRollQuest packet = ctx.message();
             Player player = ctx.sender();
             Level level = player.level();
             if (level.isClientSide) {
@@ -49,7 +50,7 @@ public class ToServerAttemptReRollQuest {
             }
 
             if (!ConfigHandler.allowReRollingCompletedQuests) {
-                if (Variables.playerQuestDataMap.get(playerUUID).values().stream().toList().get(questNumber-1).isCompleted()) {
+                if (Variables.playerQuestDataMap.get(playerUUID).values().stream().toList().get(packet.questNumber-1).isCompleted()) {
                     return;
                 }
             }
@@ -57,7 +58,7 @@ public class ToServerAttemptReRollQuest {
             if (Variables.playerDataMap.get(playerUUID).getReRollsLeft() > 0) {
                 Variables.playerDataMap.get(playerUUID).decrementReRolls();
 
-                GenerateQuests.replaceSpecificPlayerQuest((ServerLevel) level, (ServerPlayer) player, Arrays.asList(questNumber));
+                GenerateQuests.replaceSpecificPlayerQuest((ServerLevel) level, (ServerPlayer) player, Arrays.asList(packet.questNumber));
             }
         }
     }

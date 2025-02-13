@@ -19,16 +19,16 @@ import java.util.UUID;
 public class ToClientSendQuestsPacket {
     public static final ResourceLocation CHANNEL = ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "to_client_send_quests_packet");
 
-    private static List<Integer> dataEntries;
-    private static List<String> questTitles;
-    private static List<String> questDescriptions;
-    private static List<Pair<Integer, Integer>> questProgress;
+    private final List<Integer> dataEntries;
+    private final List<String> questTitles;
+    private final List<String> questDescriptions;
+    private final List<Pair<Integer, Integer>> questProgress;
 
     public ToClientSendQuestsPacket(List<Integer> dataEntriesIn, List<String> rawQuestsIn, List<String> questDescriptionsIn, List<Pair<Integer, Integer>> questProgressIn) {
-        dataEntries = dataEntriesIn;
-        questTitles = rawQuestsIn;
-        questDescriptions = questDescriptionsIn;
-        questProgress = questProgressIn;
+        this.dataEntries = dataEntriesIn;
+        this.questTitles = rawQuestsIn;
+        this.questDescriptions = questDescriptionsIn;
+        this.questProgress = questProgressIn;
     }
 
     public static ToClientSendQuestsPacket decode(FriendlyByteBuf buf) {
@@ -59,17 +59,18 @@ public class ToClientSendQuestsPacket {
 
     public static void handle(PacketContext<ToClientSendQuestsPacket> ctx) {
         if (ctx.side().equals(Side.CLIENT)) {
+            ToClientSendQuestsPacket packet = ctx.message();
             PlayerDataObject previousPlayerDataObject = VariablesClient.playerDataObject;
 
-            VariablesClient.playerDataObject = new PlayerDataObject(UUID.randomUUID(), dataEntries);
+            VariablesClient.playerDataObject = new PlayerDataObject(UUID.randomUUID(), packet.dataEntries);
             if (VariablesClient.playerDataObject.isShowingIntroduction()) {
-                UtilClient.showDailyQuestsIntroduction(questTitles.size());
+                UtilClient.showDailyQuestsIntroduction(packet.questTitles.size());
                 return;
             }
 
-            VariablesClient.questTitles = questTitles;
-            VariablesClient.questDescriptions = questDescriptions;
-            VariablesClient.questProgress = questProgress;
+            VariablesClient.questTitles = packet.questTitles;
+            VariablesClient.questDescriptions = packet.questDescriptions;
+            VariablesClient.questProgress = packet.questProgress;
 
             boolean reRollCountChanged = false;
             if (previousPlayerDataObject != null) {
