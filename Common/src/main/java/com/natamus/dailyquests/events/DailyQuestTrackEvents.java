@@ -33,6 +33,10 @@ import java.util.UUID;
 
 public class DailyQuestTrackEvents {
 	public static void onPlayerTick(Level level, Player player) {
+		if (level.isClientSide) {
+			return;
+		}
+
 		if (player.tickCount % 20 != 0) {
 			return;
 		}
