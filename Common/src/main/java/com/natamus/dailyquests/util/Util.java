@@ -114,7 +114,7 @@ public class Util {
 					Variables.usableItems.add(itemRegistry.getKey(item));
 				}
 			}
-			catch (NullPointerException ignored) { }
+			catch (Exception ignored) { }
 		}
 
 
@@ -132,7 +132,7 @@ public class Util {
 					Variables.breedableMobs.add(entityTypeRegistry.getKey(entityType));
 				}
 			}
-			catch (NullPointerException ignored) { }
+			catch (Exception ignored) { }
 		}
 
 
