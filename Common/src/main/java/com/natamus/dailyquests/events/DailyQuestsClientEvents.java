@@ -3,6 +3,7 @@ package com.natamus.dailyquests.events;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
+import com.natamus.collective.functions.GUIFunctions;
 import com.natamus.dailyquests.config.ConfigHandler;
 import com.natamus.dailyquests.data.ConstantsClient;
 import com.natamus.dailyquests.data.QuestVarGUI;
@@ -50,7 +51,7 @@ public class DailyQuestsClientEvents {
 			return;
 		}
 
-		if (ConstantsClient.mc.gui.getDebugOverlay().showDebugScreen()) {
+		if (GUIFunctions.shouldHideGUI()) {
 			return;
 		}
 
