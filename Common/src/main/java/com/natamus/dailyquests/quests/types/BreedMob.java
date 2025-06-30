@@ -41,7 +41,7 @@ public class BreedMob extends AbstractQuest {
 
 	@Override
 	public boolean isAllowedIdentifier(Level level, ResourceLocation identifier) {
-		return VanillaHusbandryAdvancements.BREEDABLE_ANIMALS.contains(this.getRegistry(level).get(identifier));
+		return VanillaHusbandryAdvancements.BREEDABLE_ANIMALS.contains(this.getRegistry(level).getValue(identifier));
 	}
 
 	@Override @Nullable

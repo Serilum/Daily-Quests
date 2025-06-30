@@ -26,7 +26,7 @@ public class TamableAnimalMixin {
 				return;
 			}
 
-			TaskFunctions.enqueueCollectiveTask(level.getServer(), () -> {
+			TaskFunctions.enqueueCollectiveServerTask(level.getServer(), () -> {
 				LivingEntity livingEntity = tamableAnimal.getOwner();
 				if (!(livingEntity instanceof Player)) {
 					return;

@@ -57,12 +57,12 @@ public class EnchantItem extends AbstractQuest {
 		ItemStack itemStack = new ItemStack(itemOptionalReference.get().value());
 
 		Optional<HolderSet.Named<Enchantment>> namedOptional = level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).get(EnchantmentTags.IN_ENCHANTING_TABLE);
-		return namedOptional.filter(holders -> EnchantmentHelper.selectEnchantment(Constants.randomSource, itemStack, 0, (holders).stream()).size() > 0).isPresent();
+		return namedOptional.filter(holders -> !EnchantmentHelper.selectEnchantment(Constants.randomSource, itemStack, 0, (holders).stream()).isEmpty()).isPresent();
 	}
 
 	@Override @Nullable
 	public ResourceLocation getRandomQuestIdentifier(Level level) {
-		List<ResourceLocation> resourceLocations = new ArrayList<ResourceLocation>(this.getRegistry(level).keySet());
+		List<ResourceLocation> resourceLocations = new ArrayList<>(this.getRegistry(level).keySet());
 
 		ResourceLocation identifier = resourceLocations.get(Constants.random.nextInt(resourceLocations.size()));
 		while (!this.isAllowedIdentifier(level, identifier)) {
