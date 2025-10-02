@@ -4,7 +4,6 @@ import com.natamus.collective.check.RegisterMod;
 import com.natamus.collective.check.ShouldLoadCheck;
 import com.natamus.dailyquests.forge.config.IntegrateForgeConfig;
 import com.natamus.dailyquests.forge.events.ForgeDailyQuestClientEvents;
-import com.natamus.dailyquests.forge.events.ForgeDailyQuestHotkeyEvents;
 import com.natamus.dailyquests.forge.events.ForgeDailyQuestServerEvents;
 import com.natamus.dailyquests.forge.events.ForgeDailyQuestTrackEvents;
 import com.natamus.dailyquests.util.Reference;
@@ -28,7 +27,7 @@ public class ModForge {
 		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
 		modEventBus.addListener(this::loadComplete);
-		modEventBus.register(ForgeDailyQuestHotkeyEvents.class);
+		ModCommon.registerHotkeys();
 
 		setGlobalConstants();
 		ModCommon.init();
