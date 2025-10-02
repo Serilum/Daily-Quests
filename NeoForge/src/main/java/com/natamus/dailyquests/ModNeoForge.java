@@ -4,7 +4,6 @@ import com.natamus.collective.check.RegisterMod;
 import com.natamus.collective.check.ShouldLoadCheck;
 import com.natamus.dailyquests.neoforge.config.IntegrateNeoForgeConfig;
 import com.natamus.dailyquests.neoforge.events.NeoForgeDailyQuestClientEvents;
-import com.natamus.dailyquests.neoforge.events.NeoForgeDailyQuestHotkeyEvents;
 import com.natamus.dailyquests.neoforge.events.NeoForgeDailyQuestServerEvents;
 import com.natamus.dailyquests.neoforge.events.NeoForgeDailyQuestTrackEvents;
 import com.natamus.dailyquests.util.Reference;
@@ -25,7 +24,7 @@ public class ModNeoForge {
 		}
 
 		modEventBus.addListener(this::loadComplete);
-		modEventBus.register(NeoForgeDailyQuestHotkeyEvents.class);
+		ModCommon.registerHotkeys();
 
 		setGlobalConstants();
 		ModCommon.init();

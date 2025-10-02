@@ -4,12 +4,10 @@ import com.natamus.collective.check.RegisterMod;
 import com.natamus.collective.check.ShouldLoadCheck;
 import com.natamus.dailyquests.forge.config.IntegrateForgeConfig;
 import com.natamus.dailyquests.forge.events.ForgeDailyQuestClientEvents;
-import com.natamus.dailyquests.forge.events.ForgeDailyQuestHotkeyEvents;
 import com.natamus.dailyquests.forge.events.ForgeDailyQuestServerEvents;
 import com.natamus.dailyquests.forge.events.ForgeDailyQuestTrackEvents;
 import com.natamus.dailyquests.util.Reference;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.eventbus.api.bus.BusGroup;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
@@ -27,7 +25,7 @@ public class ModForge {
 		BusGroup busGroup = modLoadingContext.getModBusGroup();
 
 		FMLLoadCompleteEvent.getBus(busGroup).addListener(this::loadComplete);
-		RegisterKeyMappingsEvent.getBus(busGroup).addListener(ForgeDailyQuestHotkeyEvents::registerKeyBinding);
+		ModCommon.registerHotkeys();
 
 		setGlobalConstants();
 		ModCommon.init();
