@@ -6,7 +6,7 @@ logoFile="icon.png"
 
 [[mods]]
 modId="dailyquests"
-version="2.4"
+version="2.5"
 displayName="Daily Quests"
 displayURL="https://serilum.com/mod/daily-quests"
 authors="Rick South"
@@ -22,7 +22,7 @@ If you would like to contribute too, check out https://serilum.com/donate. Appre
 [[dependencies.dailyquests]]
     modId="collective"
     mandatory=true
-    versionRange="[8.5,)"
+    versionRange="[8.8,)"
     ordering="NONE"
     side="BOTH"
 
