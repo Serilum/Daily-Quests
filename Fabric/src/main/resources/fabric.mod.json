@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "id": "dailyquests",
+  "version": "2.6",
+
+  "name": "Daily Quests",
+  "description": "Complete randomly generated quests each day for experience and loot! Made for the 2024 CurseForge ModJam.",
+  "authors": [ "Rick South" ],
+  "contact": {
+    "homepage": "https://serilum.com/mod/daily-quests",
+    "sources": "https://github.com/Serilum/Daily-Quests",
+    "issues": "https://github.com/Serilum/.issue-tracker/labels/Mod:%20Daily%20Quests"
+  },
+
+  "license": "All Right Reserved",
+  "icon": "icon.png",
+
+  "environment": "*",
+  "entrypoints": { "main": [ "com.natamus.dailyquests.ModFabric" ], "client": [ "com.natamus.dailyquests.ModFabricClient" ], "modmenu": [ "com.natamus.dailyquests.fabric.config.IntegrateModMenu" ] },
+  "mixins": [
+    "dailyquests.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.18.0",
+    "fabric-api": "*",
+    "minecraft": ">=26.1",
+    "java": ">=25",
+    "collective": ">=8.16"
+  },
+
+  "custom": {
+    "modmenu": {
+      "links": {
+        "Donate <3" : "https://serilum.com/donate"
+      }
+    }
+  },
+
+  "contributors": [
+	  " ",
+	  "Thank you very much to my Membership sponsors for supporting the development of this mod!",
+	  " ",
+	  "If you would like to contribute too, check out https://serilum.com/donate.",
+	  " ",
+	  "Membership sponsors:",
+	  " akanealw",
+	  " Alister",
+	  " Andrean Olgo",
+	  " aternosorg",
+	  " Cherriesaurus",
+	  " MWS",
+	  " t128",
+	  " Tyler Behl",
+	  " XAgent",
+	  " ตัวตรึง พระนคร"
+  ]
+}
