@@ -10,7 +10,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.living.BabyEntitySpawnEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
-import net.neoforged.neoforge.event.level.BlockEvent;
+import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 public class NeoForgeDailyQuestTrackEvents {
@@ -21,7 +21,7 @@ public class NeoForgeDailyQuestTrackEvents {
 	}
 
 	@SubscribeEvent
-	public static void onBlockBreak(BlockEvent.BreakEvent e) {
+	public static void onBlockBreak(BreakBlockEvent e) {
 		Level level = WorldFunctions.getWorldIfInstanceOfAndNotRemote(e.getLevel());
 		if (level == null) {
 			return;
