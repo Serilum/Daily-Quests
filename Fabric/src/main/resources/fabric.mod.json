@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "dailyquests",
-  "version": "2.7",
+  "version": "2.8",
 
   "name": "Daily Quests",
   "description": "Complete randomly generated quests each day for experience and loot! Made for the 2024 CurseForge ModJam.",
@@ -26,7 +26,7 @@
     "fabric-api": "*",
     "minecraft": ">=26.1",
     "java": ">=25",
-    "collective": ">=8.22"
+    "collective": ">=8.25"
   },
 
   "custom": {
@@ -44,12 +44,12 @@
 	  "If you would like to contribute too, check out https://serilum.com/donate.",
 	  " ",
 	  "Membership sponsors:",
-	  " akanealw",
 	  " Andrean Olgo",
 	  " aternosorg",
 	  " Cherriesaurus",
+	  " Linda Jansen",
+	  " Michelle Smith",
 	  " MWS",
-	  " Tyler Behl",
-	  " XAgent"
+	  " Tyler Behl"
   ]
 }

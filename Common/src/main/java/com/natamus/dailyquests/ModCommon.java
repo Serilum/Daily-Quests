@@ -29,6 +29,6 @@ public class ModCommon {
 	}
 
 	public static void registerHotkeys() {
-		ConstantsClient.toggleQuestListKey = Services.REGISTERKEYMAPPING.registerKeyMapping("dailyquests.key.togglequestlistcollapse", 46, "key.categories.misc");
+		ConstantsClient.toggleQuestListKey = Services.REGISTERKEYMAPPING.registerKeyMapping("collective.dailyquests.key.togglequestlistcollapse", 46, "key.categories.misc");
 	}
 }
