@@ -1,4 +1,5 @@
 package com.natamus.dailyquests.cmds;
+import com.natamus.dailyquests.util.Reference;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
@@ -37,7 +38,7 @@ public class CommandDailyQuests {
 					CommandSourceStack source = command.getSource();
 					ServerPlayer serverPlayer = source.getPlayer();
 					if (serverPlayer == null) {
-						MessageFunctions.sendMessage(source, "Only in-game players can use this command.", ChatFormatting.RED);
+						MessageFunctions.sendTranslatableMessage(source, "collective.shared.message.playeronly", ChatFormatting.RED);
 						return 0;
 					}
 
@@ -52,11 +53,11 @@ public class CommandDailyQuests {
 						reRollsRemaining = playerDataObject.getReRollsLeft();
 					}
 
-					MessageFunctions.sendMessage(serverPlayer, Component.literal("Daily Quests Stats").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.GRAY), true);
-					MessageFunctions.sendMessage(serverPlayer, " > Quests completed: " + questsCompleted, ChatFormatting.GRAY);
-					MessageFunctions.sendMessage(serverPlayer, " > Re-rolls remaining: " + reRollsRemaining, ChatFormatting.GRAY);
+					MessageFunctions.sendMessage(serverPlayer, Component.translatable("collective.dailyquests.message.stats", Reference.NAME).withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.GRAY), true);
+					MessageFunctions.sendTranslatableMessage(serverPlayer, " ", "collective.dailyquests.message.questscompleted", ChatFormatting.GRAY, questsCompleted);
+					MessageFunctions.sendTranslatableMessage(serverPlayer, " ", "collective.dailyquests.message.rerollsremaining", ChatFormatting.GRAY, reRollsRemaining);
 
-					MessageFunctions.sendMessage(serverPlayer, "To see your quests, use /dq quests", ChatFormatting.DARK_GREEN, true);
+					MessageFunctions.sendTranslatableMessage(serverPlayer, "collective.dailyquests.message.seequestsuse", true, ChatFormatting.DARK_GREEN);
 					return 1;
 				}))
 
@@ -65,19 +66,19 @@ public class CommandDailyQuests {
 					CommandSourceStack source = command.getSource();
 					ServerPlayer serverPlayer = source.getPlayer();
 					if (serverPlayer == null) {
-						MessageFunctions.sendMessage(source, "Only in-game players can use this command.", ChatFormatting.RED);
+						MessageFunctions.sendTranslatableMessage(source, "collective.shared.message.playeronly", ChatFormatting.RED);
 						return 0;
 					}
 
 					UUID playerUUID = serverPlayer.getUUID();
 					if (!Variables.playerQuestDataMap.containsKey(playerUUID)) {
-						MessageFunctions.sendMessage(serverPlayer, "Unable to find quest data.", ChatFormatting.RED);
+						MessageFunctions.sendTranslatableMessage(serverPlayer, "collective.dailyquests.message.unablefindquestdata", ChatFormatting.RED);
 						return 0;
 					}
 
 					ServerLevel serverLevel = serverPlayer.serverLevel();
 
-					MessageFunctions.sendMessage(serverPlayer, Component.literal(serverPlayer.getName().getString() + " Quests").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.GRAY), true);
+					MessageFunctions.sendMessage(serverPlayer, Component.translatable("collective.dailyquests.message.quests", serverPlayer.getName().getString()).withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.GRAY), true);
 
 					LinkedHashMap<AbstractQuest, QuestObject> quests = Variables.playerQuestDataMap.get(playerUUID);
 					for (QuestObject quest : quests.values()) {
@@ -95,7 +96,7 @@ public class CommandDailyQuests {
 						MessageFunctions.sendMessage(serverPlayer, " > " + quest.getQuestTitle(serverLevel) + ":" + questDescription + " " + questProgress , ChatFormatting.GRAY);
 					}
 
-					MessageFunctions.sendMessage(serverPlayer, "To see your quest stats, use /dq info", ChatFormatting.DARK_GREEN, true);
+					MessageFunctions.sendTranslatableMessage(serverPlayer, "collective.dailyquests.message.seequeststats", true, ChatFormatting.DARK_GREEN);
 					return 1;
 				}))
 
@@ -106,7 +107,7 @@ public class CommandDailyQuests {
 				.executes((command) -> {
 					CommandSourceStack source = command.getSource();
 					if (!source.hasPermission(2)) {
-						MessageFunctions.sendMessage(source, "You do not have the permissions to use that command.", ChatFormatting.RED);
+						MessageFunctions.sendTranslatableMessage(source, "collective.shared.message.nopermission", ChatFormatting.RED);
 						return 0;
 					}
 
@@ -115,7 +116,7 @@ public class CommandDailyQuests {
 
 					GenerateQuests.replaceAllPlayerQuests(targetPlayer.serverLevel(), targetPlayer, count);
 
-					MessageFunctions.sendMessage(source, "All active player quests have been replaced.", ChatFormatting.GRAY, true);
+					MessageFunctions.sendTranslatableMessage(source, "collective.dailyquests.message.activeplayerquests", true, ChatFormatting.GRAY);
 					return 1;
 				})))))
 
@@ -126,7 +127,7 @@ public class CommandDailyQuests {
 				.executes((command) -> {
 					CommandSourceStack source = command.getSource();
 					if (!source.hasPermission(2)) {
-						MessageFunctions.sendMessage(source, "You do not have the permissions to use that command.", ChatFormatting.RED);
+						MessageFunctions.sendTranslatableMessage(source, "collective.shared.message.nopermission", ChatFormatting.RED);
 						return 0;
 					}
 
@@ -134,7 +135,7 @@ public class CommandDailyQuests {
 					UUID playerUUID = targetPlayer.getUUID();
 
 					if (!Variables.playerQuestDataMap.containsKey(playerUUID)) {
-						MessageFunctions.sendMessage(source, "That player does not have any active quests.", ChatFormatting.RED);
+						MessageFunctions.sendTranslatableMessage(source, "collective.dailyquests.message.playeractivequests", ChatFormatting.RED);
 						return 0;
 					}
 
@@ -142,7 +143,7 @@ public class CommandDailyQuests {
 
 					LinkedHashMap<AbstractQuest, QuestObject> quests = Variables.playerQuestDataMap.get(playerUUID);
 					if (number-1 >= quests.size()) {
-						MessageFunctions.sendMessage(source, "That quest number does not exist.", ChatFormatting.RED);
+						MessageFunctions.sendTranslatableMessage(source, "collective.dailyquests.message.questnumberexist", ChatFormatting.RED);
 						return 0;
 					}
 
@@ -153,7 +154,7 @@ public class CommandDailyQuests {
 
 					CompleteQuests.updateQuestProgression(wrappedQuestType, level, targetPlayer, Constants.defaultResourceLocation, 1000000, true);
 
-					MessageFunctions.sendMessage(source, "Force completed the quest " + questObject.getQuestTitle(level) + " for " + targetPlayer.getName().getString() + ".", ChatFormatting.GRAY, true);
+					MessageFunctions.sendTranslatableMessage(source, "collective.dailyquests.message.forcecompletedquest", true, ChatFormatting.GRAY, questObject.getQuestTitle(level), targetPlayer.getName().getString());
 					return 1;
 				})))))
 
@@ -163,7 +164,7 @@ public class CommandDailyQuests {
 				.executes((command) -> {
 					CommandSourceStack source = command.getSource();
 					if (!source.hasPermission(2)) {
-						MessageFunctions.sendMessage(source, "You do not have the permissions to use that command.", ChatFormatting.RED);
+						MessageFunctions.sendTranslatableMessage(source, "collective.shared.message.nopermission", ChatFormatting.RED);
 						return 0;
 					}
 
@@ -175,7 +176,7 @@ public class CommandDailyQuests {
 					Util.saveQuestDataPlayer(targetPlayer);
 					Util.sendQuestDataToClient(targetPlayer);
 
-					MessageFunctions.sendMessage(source, targetPlayer.getName().getString() + "'s re-rolls have been reset.", ChatFormatting.GRAY, true);
+					MessageFunctions.sendTranslatableMessage(source, "collective.dailyquests.message.rerollsreset", true, ChatFormatting.GRAY, targetPlayer.getName().getString());
 					return 1;
 				}))))
 
@@ -186,7 +187,7 @@ public class CommandDailyQuests {
 				.executes((command) -> {
 					CommandSourceStack source = command.getSource();
 					if (!source.hasPermission(2)) {
-						MessageFunctions.sendMessage(source, "You do not have the permissions to use that command.", ChatFormatting.RED);
+						MessageFunctions.sendTranslatableMessage(source, "collective.shared.message.nopermission", ChatFormatting.RED);
 						return 0;
 					}
 
@@ -203,7 +204,7 @@ public class CommandDailyQuests {
 					Util.saveQuestDataPlayer(targetPlayer);
 					Util.sendQuestDataToClient(targetPlayer);
 
-					MessageFunctions.sendMessage(source, targetPlayer.getName().getString() + " now has " + amount + " completed quests!", ChatFormatting.GRAY, true);
+					MessageFunctions.sendTranslatableMessage(source, "collective.dailyquests.message.completedquests", true, ChatFormatting.GRAY, targetPlayer.getName().getString(), amount);
 					return 1;
 				})))))
 
@@ -216,7 +217,7 @@ public class CommandDailyQuests {
 				.executes((command) -> {
 					CommandSourceStack source = command.getSource();
 					if (!source.hasPermission(2)) {
-						MessageFunctions.sendMessage(source, "You do not have the permissions to use that command.", ChatFormatting.RED);
+						MessageFunctions.sendTranslatableMessage(source, "collective.shared.message.nopermission", ChatFormatting.RED);
 						return 0;
 					}
 
@@ -229,13 +230,13 @@ public class CommandDailyQuests {
 
 					AbstractQuest questType = QuestWrapper.getQuestTypeFromName(questTypeString);
 					if (questType == null) {
-						MessageFunctions.sendMessage(source, "Unable to find quest type from string: " + questTypeString, ChatFormatting.RED);
+						MessageFunctions.sendTranslatableMessage(source, "collective.dailyquests.message.unablefindquesttype", ChatFormatting.RED, questTypeString);
 						return 0;
 					}
 
 					ResourceLocation identifier = ResourceLocation.parse(questIdentifierString);
 					if (identifier == null) {
-						MessageFunctions.sendMessage(source, "Unable to find quest identifier from string: " + questIdentifierString, ChatFormatting.RED);
+						MessageFunctions.sendTranslatableMessage(source, "collective.dailyquests.message.unablefindquestidentifier", ChatFormatting.RED, questIdentifierString);
 						return 0;
 					}
 
@@ -262,7 +263,7 @@ public class CommandDailyQuests {
 					Util.saveQuestDataPlayer(targetPlayer);
 					Util.sendQuestDataToClient(targetPlayer);
 
-					MessageFunctions.sendMessage(source, "Added the " + quest.getQuestTitle(serverLevel) + " quest type to " + targetPlayer.getName().getString() + "'s quest list.", ChatFormatting.GRAY, true);
+					MessageFunctions.sendTranslatableMessage(source, "collective.dailyquests.message.addedquesttype", true, ChatFormatting.GRAY, quest.getQuestTitle(serverLevel), targetPlayer.getName().getString());
 					return 1;
 				})))))))
 			);

@@ -1,5 +1,5 @@
 <h2>Daily Quests</h2>
-<p><a href="https://github.com/Serilum/Daily-Quests"><img src="https://serilum.com/assets/data/logo/daily-quests.png"></a></p><h2>Download</h2>
+<p><a href="https://github.com/Serilum/Daily-Quests"><img src="https://serilum.com/assets/images/logo/daily-quests.png"></a></p><h2>Download</h2>
 <p>You can download Daily Quests on CurseForge and Modrinth:</p><p>&nbsp;&nbsp;CurseForge: &nbsp;&nbsp;<a href="https://curseforge.com/minecraft/mc-mods/daily-quests">https://curseforge.com/minecraft/mc-mods/daily-quests</a><br>&nbsp;&nbsp;Modrinth: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://modrinth.com/mod/daily-quests">https://modrinth.com/mod/daily-quests</a></p>
 <h2>Issue Tracker</h2>
 <p>To keep a better overview of all mods, the issue tracker is located in a separate repository.<br>&nbsp;&nbsp;For issues, ideas, suggestions or anything else, please follow this link:</p>

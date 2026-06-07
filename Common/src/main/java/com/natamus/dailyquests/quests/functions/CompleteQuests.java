@@ -234,7 +234,7 @@ public class CompleteQuests {
 			summaryContent.add(" > Items received: " + Util.formatItemStacks(lootTableItemStacks));
 		}
 
-		MessageFunctions.sendMessage(serverPlayer, Component.literal("Quest Summary").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.GRAY), true);
+		MessageFunctions.sendMessage(serverPlayer, Component.translatable("collective.dailyquests.message.questsummary").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.GRAY), true);
 		for (String content : summaryContent) {
 			MessageFunctions.sendMessage(serverPlayer, content, ChatFormatting.GRAY);
 		}
