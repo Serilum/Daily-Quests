@@ -10,6 +10,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -49,7 +50,7 @@ public class SlayMob extends AbstractQuest {
 		}
 
 		EntityType<?> entityType = entityTypeOptionalReference.get().value();
-		return entityType.getCategory().equals(MobCategory.MONSTER) && !entityType.equals(EntityType.ILLUSIONER);
+		return entityType.getCategory().equals(MobCategory.MONSTER) && !entityType.equals(EntityTypes.ILLUSIONER);
 	}
 
 	@Override @Nullable
@@ -71,9 +72,9 @@ public class SlayMob extends AbstractQuest {
 	    if (entityTypeOptionalReference.isPresent()) {
 	        Holder.Reference<EntityType<?>> entityTypeHolder = entityTypeOptionalReference.get();
 			EntityType<?> entityType = entityTypeHolder.value();
-	        if (entityTypeHolder.is(Constants.BOSSES) || entityType.equals(EntityType.ENDER_DRAGON) || entityType.equals(EntityType.WARDEN) || entityType.equals(EntityType.WITHER)) {
+	        if (entityTypeHolder.is(Constants.BOSSES) || entityType.equals(EntityTypes.ENDER_DRAGON) || entityType.equals(EntityTypes.WARDEN) || entityType.equals(EntityTypes.WITHER)) {
 	            return 1;
-	        } else if (entityType.equals(EntityType.ELDER_GUARDIAN)) {
+	        } else if (entityType.equals(EntityTypes.ELDER_GUARDIAN)) {
 	            return 3;
 	        }
 	    }

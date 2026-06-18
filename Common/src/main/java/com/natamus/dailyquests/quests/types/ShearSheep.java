@@ -9,6 +9,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
@@ -43,7 +44,7 @@ public class ShearSheep extends AbstractQuest {
 
 	@Override @Nullable
 	public Identifier getRandomQuestIdentifier(Level level) {
-		return this.getRegistry(level).getKey(EntityType.SHEEP);
+		return this.getRegistry(level).getKey(EntityTypes.SHEEP);
 	}
 
 	@Override

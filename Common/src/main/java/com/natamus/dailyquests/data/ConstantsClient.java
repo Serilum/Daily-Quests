@@ -1,7 +1,6 @@
 package com.natamus.dailyquests.data;
 
 import net.minecraft.client.KeyMapping;
-import net.minecraft.client.Minecraft;
 
 import java.awt.*;
 
