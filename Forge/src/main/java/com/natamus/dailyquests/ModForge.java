@@ -40,7 +40,7 @@ public class ModForge {
 			ForgeDailyQuestClientEvents.registerEventsInBus();
 		}
 
-    	ForgeDailyQuestServerEvents.registerEventsInBus();
+		ForgeDailyQuestServerEvents.registerEventsInBus();
 		ForgeDailyQuestTrackEvents.registerEventsInBus();
 	}
 

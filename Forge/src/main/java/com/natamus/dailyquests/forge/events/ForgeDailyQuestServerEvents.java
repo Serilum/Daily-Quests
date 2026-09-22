@@ -28,18 +28,18 @@ public class ForgeDailyQuestServerEvents {
 		DailyQuestServerEvents.onWorldLoad(level);
 	}
 
-    @SubscribeEvent
-    public static void onServerTick(TickEvent.ServerTickEvent.Post e) {
-        DailyQuestServerEvents.onServerTick(e.server());
-    }
+	@SubscribeEvent
+	public static void onServerTick(TickEvent.ServerTickEvent.Post e) {
+		DailyQuestServerEvents.onServerTick(e.server());
+	}
 
 	@SubscribeEvent
 	public static void onScaffoldingItem(EntityJoinLevelEvent e) {
 		DailyQuestServerEvents.onEntityJoinLevel(e.getLevel(), e.getEntity());
 	}
 
-    @SubscribeEvent
-    public static void registerCommands(RegisterCommandsEvent e) {
-    	CommandDailyQuests.register(e.getDispatcher());
-    }
+	@SubscribeEvent
+	public static void registerCommands(RegisterCommandsEvent e) {
+		CommandDailyQuests.register(e.getDispatcher());
+	}
 }

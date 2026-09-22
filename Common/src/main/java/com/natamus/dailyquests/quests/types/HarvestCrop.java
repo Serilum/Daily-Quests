@@ -62,12 +62,12 @@ public class HarvestCrop extends AbstractQuest {
 	@Override
 	public String getLocalizedIdentifierName(Level level, Identifier identifier) {
 		Registry<Block> registry = this.getRegistry(level);
-        if (registry.containsKey(identifier)) {
+		if (registry.containsKey(identifier)) {
 			Optional<Holder.Reference<Block>> blockOptionalReference = registry.get(identifier);
 			if (blockOptionalReference.isPresent()) {
 				return blockOptionalReference.get().value().getName().getString().replaceAll("[\\[\\]]", "");
 			}
-        }
+		}
 		return identifier.toString();
 	}
 

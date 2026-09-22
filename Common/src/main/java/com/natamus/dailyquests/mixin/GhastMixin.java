@@ -13,12 +13,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = Ghast.class, priority = 1001)
 public abstract class GhastMixin {
-    @Shadow
-    private static boolean isReflectedFireball(DamageSource damageSource) {
-        throw new AssertionError();
-    }
+	@Shadow
+	private static boolean isReflectedFireball(DamageSource damageSource) {
+		throw new AssertionError();
+	}
 
-    @Inject(method = "hurtServer(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)Z", at = @At(value = "RETURN"))
+	@Inject(method = "hurtServer(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)Z", at = @At(value = "RETURN"))
 	public void hurt(ServerLevel serverLevel, DamageSource damageSource, float f, CallbackInfoReturnable<Boolean> cir) {
 		if (!isReflectedFireball(damageSource)) {
 			return;

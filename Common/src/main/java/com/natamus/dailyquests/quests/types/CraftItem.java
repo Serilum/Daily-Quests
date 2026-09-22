@@ -63,13 +63,13 @@ public class CraftItem extends AbstractQuest {
 	@Override
 	public String getLocalizedIdentifierName(Level level, Identifier identifier) {
 		Registry<Item> registry = this.getRegistry(level);
-        if (registry.containsKey(identifier)) {
+		if (registry.containsKey(identifier)) {
 			Optional<Holder.Reference<Item>> itemOptionalReference = registry.get(identifier);
 			if (itemOptionalReference.isPresent()) {
 				ItemStack itemStack = new ItemStack(itemOptionalReference.get().value());
 				return itemStack.getDisplayName().getString().replaceAll("[\\[\\]]", "");
 			}
-        }
+		}
 		return identifier.toString();
 	}
 

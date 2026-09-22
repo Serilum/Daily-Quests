@@ -17,49 +17,49 @@ import java.util.Arrays;
 import java.util.UUID;
 
 public class ToServerAttemptReRollQuest {
-    public static final Identifier CHANNEL = Identifier.fromNamespaceAndPath(Reference.MOD_ID, "to_server_attempt_re_roll_quest");
+	public static final Identifier CHANNEL = Identifier.fromNamespaceAndPath(Reference.MOD_ID, "to_server_attempt_re_roll_quest");
 
-    private final int questNumber;
+	private final int questNumber;
 
-    public ToServerAttemptReRollQuest(int questNumberIn) {
-        this.questNumber = questNumberIn;
-    }
+	public ToServerAttemptReRollQuest(int questNumberIn) {
+		this.questNumber = questNumberIn;
+	}
 
-    public static ToServerAttemptReRollQuest decode(FriendlyByteBuf buf) {
-        int questNumberIn = buf.readInt();
+	public static ToServerAttemptReRollQuest decode(FriendlyByteBuf buf) {
+		int questNumberIn = buf.readInt();
 
-        return new ToServerAttemptReRollQuest(questNumberIn);
-    }
+		return new ToServerAttemptReRollQuest(questNumberIn);
+	}
 
-    public void encode(FriendlyByteBuf buf) {
-        buf.writeInt(questNumber);
-    }
+	public void encode(FriendlyByteBuf buf) {
+		buf.writeInt(questNumber);
+	}
 
-    public static void handle(PacketContext<ToServerAttemptReRollQuest> ctx) {
-        if (ctx.side().equals(Side.SERVER)) {
-            ToServerAttemptReRollQuest packet = ctx.message();
-            Player player = ctx.sender();
-            Level level = player.level();
-            if (level.isClientSide()) {
-                return;
-            }
+	public static void handle(PacketContext<ToServerAttemptReRollQuest> ctx) {
+		if (ctx.side().equals(Side.SERVER)) {
+			ToServerAttemptReRollQuest packet = ctx.message();
+			Player player = ctx.sender();
+			Level level = player.level();
+			if (level.isClientSide()) {
+				return;
+			}
 
-            UUID playerUUID = player.getUUID();
-            if (!Variables.playerDataMap.containsKey(playerUUID) || !Variables.playerQuestDataMap.containsKey(playerUUID)) {
-                return;
-            }
+			UUID playerUUID = player.getUUID();
+			if (!Variables.playerDataMap.containsKey(playerUUID) || !Variables.playerQuestDataMap.containsKey(playerUUID)) {
+				return;
+			}
 
-            if (!ConfigHandler.allowReRollingCompletedQuests) {
-                if (Variables.playerQuestDataMap.get(playerUUID).values().stream().toList().get(packet.questNumber-1).isCompleted()) {
-                    return;
-                }
-            }
+			if (!ConfigHandler.allowReRollingCompletedQuests) {
+				if (Variables.playerQuestDataMap.get(playerUUID).values().stream().toList().get(packet.questNumber-1).isCompleted()) {
+					return;
+				}
+			}
 
-            if (Variables.playerDataMap.get(playerUUID).getReRollsLeft() > 0) {
-                Variables.playerDataMap.get(playerUUID).decrementReRolls();
+			if (Variables.playerDataMap.get(playerUUID).getReRollsLeft() > 0) {
+				Variables.playerDataMap.get(playerUUID).decrementReRolls();
 
-                GenerateQuests.replaceSpecificPlayerQuest((ServerLevel) level, (ServerPlayer) player, Arrays.asList(packet.questNumber));
-            }
-        }
-    }
+				GenerateQuests.replaceSpecificPlayerQuest((ServerLevel) level, (ServerPlayer) player, Arrays.asList(packet.questNumber));
+			}
+		}
+	}
 }

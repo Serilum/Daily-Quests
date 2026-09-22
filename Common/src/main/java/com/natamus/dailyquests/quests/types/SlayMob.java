@@ -67,19 +67,19 @@ public class SlayMob extends AbstractQuest {
 
 	@Override
 	public int getRandomQuestProgressGoal(Level level, Identifier identifier) {
-	    Optional<Holder.Reference<EntityType<?>>> entityTypeOptionalReference = this.getRegistry(level).get(identifier);
+		Optional<Holder.Reference<EntityType<?>>> entityTypeOptionalReference = this.getRegistry(level).get(identifier);
 
-	    if (entityTypeOptionalReference.isPresent()) {
-	        Holder.Reference<EntityType<?>> entityTypeHolder = entityTypeOptionalReference.get();
+		if (entityTypeOptionalReference.isPresent()) {
+			Holder.Reference<EntityType<?>> entityTypeHolder = entityTypeOptionalReference.get();
 			EntityType<?> entityType = entityTypeHolder.value();
-	        if (entityTypeHolder.is(Constants.BOSSES) || entityType.equals(EntityTypes.ENDER_DRAGON) || entityType.equals(EntityTypes.WARDEN) || entityType.equals(EntityTypes.WITHER)) {
-	            return 1;
-	        } else if (entityType.equals(EntityTypes.ELDER_GUARDIAN)) {
-	            return 3;
-	        }
-	    }
+			if (entityTypeHolder.is(Constants.BOSSES) || entityType.equals(EntityTypes.ENDER_DRAGON) || entityType.equals(EntityTypes.WARDEN) || entityType.equals(EntityTypes.WITHER)) {
+				return 1;
+			} else if (entityType.equals(EntityTypes.ELDER_GUARDIAN)) {
+				return 3;
+			}
+		}
 
-	    return Constants.random.nextInt(6, 16) + 1;
+		return Constants.random.nextInt(6, 16) + 1;
 	}
 
 	@Override
@@ -90,12 +90,12 @@ public class SlayMob extends AbstractQuest {
 	@Override
 	public String getLocalizedIdentifierName(Level level, Identifier identifier) {
 		Registry<EntityType<?>> registry = this.getRegistry(level);
-        if (registry.containsKey(identifier)) {
+		if (registry.containsKey(identifier)) {
 			Optional<Holder.Reference<EntityType<?>>> entityTypeOptionalReference = registry.get(identifier);
 			if (entityTypeOptionalReference.isPresent()) {
 				return entityTypeOptionalReference.get().value().getDescription().getString().replaceAll("[\\[\\]]", "");
 			}
-        }
+		}
 		return identifier.toString();
 	}
 

@@ -47,7 +47,7 @@ public class PlayerDataObject {
 			this.showingIntroduction = (rqSpl.length > 3) && (Integer.parseInt(rqSpl[3]) == 1);
 		}
 		catch (Exception ex) {
-            Constants.logger.warn("[" + Reference.NAME + "] Unable to parse player data from raw data tag: {}", rawDataTag);
+			Constants.logger.warn("[" + Reference.NAME + "] Unable to parse player data from raw data tag: {}", rawDataTag);
 			ex.printStackTrace();
 		}
 	}

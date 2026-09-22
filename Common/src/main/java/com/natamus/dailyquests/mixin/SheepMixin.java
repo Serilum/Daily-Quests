@@ -15,10 +15,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class SheepMixin {
 	@Inject(method = "mobInteract", at = @At("HEAD"))
 	private void onMobInteract(Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
-	    Sheep sheep = (Sheep)(Object)this;
+		Sheep sheep = (Sheep)(Object)this;
 
-	    if (player.getItemInHand(hand).is(Items.SHEARS) && sheep.readyForShearing()) {
-	        DailyQuestTrackEvents.onSheepShear(player.level(), player, sheep);
-	    }
+		if (player.getItemInHand(hand).is(Items.SHEARS) && sheep.readyForShearing()) {
+			DailyQuestTrackEvents.onSheepShear(player.level(), player, sheep);
+		}
 	}
 }

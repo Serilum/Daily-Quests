@@ -46,7 +46,7 @@ public class QuestObject {
 			this.isCreated = true;
 		}
 		catch (Exception ex) {
-            Constants.logger.warn("[" + Reference.NAME + "] Unable to parse quest from raw data tag: {}", rawDataTag);
+			Constants.logger.warn("[" + Reference.NAME + "] Unable to parse quest from raw data tag: {}", rawDataTag);
 			ex.printStackTrace();
 		}
 	}
@@ -119,9 +119,9 @@ public class QuestObject {
 		return this.currentProgress == this.goalProgress;
 	}
 
-    public AbstractQuest getType() {
-        return this.type;
-    }
+	public AbstractQuest getType() {
+		return this.type;
+	}
 
 	public Identifier getIdentifier() {
 		return this.identifier;

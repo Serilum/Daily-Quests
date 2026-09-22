@@ -40,8 +40,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Util {
-    @SuppressWarnings("deprecation")
-    public static void generateIdentifierLists(Level level) {
+	@SuppressWarnings("deprecation")
+	public static void generateIdentifierLists(Level level) {
 		if (level.isClientSide()) {
 			return;
 		}
@@ -93,28 +93,28 @@ public class Util {
 		}
 
 		for (Biome biome : biomeRegistry.stream().toList()) {
-		    BiomeGenerationSettings biomeGenerationSettings = biome.getGenerationSettings();
-		    for (HolderSet<PlacedFeature> placedFeatureHolderSet : biomeGenerationSettings.features()) {
-		        for (Holder<PlacedFeature> placedFeatureHolder : placedFeatureHolderSet.stream().toList()) {
-		            PlacedFeature placedFeature = placedFeatureHolder.value();
-		            for (Holder<ConfiguredFeature<?, ?>> configuredFeatureHolder : placedFeature.getFeatures().toList()) {
-		                ConfiguredFeature<?, ?> configuredFeature = configuredFeatureHolder.value();
-		                FeatureConfiguration config = configuredFeature.config();
-		                if (config instanceof OreConfiguration oreConfig) {
-		                    for (OreConfiguration.TargetBlockState targetBlockState : oreConfig.targetStates) {
-		                        Identifier targetBlockIdentifier = blockRegistry.getKey(targetBlockState.state.getBlock());
-		                        if (targetBlockIdentifier.toString().contains("infested_")) {
-		                            continue;
-		                        }
+			BiomeGenerationSettings biomeGenerationSettings = biome.getGenerationSettings();
+			for (HolderSet<PlacedFeature> placedFeatureHolderSet : biomeGenerationSettings.features()) {
+				for (Holder<PlacedFeature> placedFeatureHolder : placedFeatureHolderSet.stream().toList()) {
+					PlacedFeature placedFeature = placedFeatureHolder.value();
+					for (Holder<ConfiguredFeature<?, ?>> configuredFeatureHolder : placedFeature.getFeatures().toList()) {
+						ConfiguredFeature<?, ?> configuredFeature = configuredFeatureHolder.value();
+						FeatureConfiguration config = configuredFeature.config();
+						if (config instanceof OreConfiguration oreConfig) {
+							for (OreConfiguration.TargetBlockState targetBlockState : oreConfig.targetStates) {
+								Identifier targetBlockIdentifier = blockRegistry.getKey(targetBlockState.state.getBlock());
+								if (targetBlockIdentifier.toString().contains("infested_")) {
+									continue;
+								}
 
-		                        if (!Variables.naturallyGeneratedOres.contains(targetBlockIdentifier)) {
-		                            Variables.naturallyGeneratedOres.add(targetBlockIdentifier);
-		                        }
-		                    }
-		                }
-		            }
-		        }
-		    }
+								if (!Variables.naturallyGeneratedOres.contains(targetBlockIdentifier)) {
+									Variables.naturallyGeneratedOres.add(targetBlockIdentifier);
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 
 
@@ -193,7 +193,7 @@ public class Util {
 
 			if (questData.getFirst() == null || (questData.getSecond().isEmpty() && !isOnIntroduction)) {
 				if (hasQuestData(serverPlayer)) {
-                    Constants.logger.warn("[" + Reference.NAME + "] Unable to load quest data for player {}. (loadQuestDataPlayer)", serverPlayer.getName().getString());
+					Constants.logger.warn("[" + Reference.NAME + "] Unable to load quest data for player {}. (loadQuestDataPlayer)", serverPlayer.getName().getString());
 				}
 
 				return;
@@ -285,43 +285,43 @@ public class Util {
 		return false;
 	}
 
-    public static List<ItemStack> mergeItemStacks(List<ItemStack> itemStacks) {
-        Map<Item, Integer> itemCountMap = new HashMap<>();
+	public static List<ItemStack> mergeItemStacks(List<ItemStack> itemStacks) {
+		Map<Item, Integer> itemCountMap = new HashMap<>();
 
-        for (ItemStack stack : itemStacks) {
-            Item item = stack.getItem();
-            int count = stack.getCount();
+		for (ItemStack stack : itemStacks) {
+			Item item = stack.getItem();
+			int count = stack.getCount();
 
-            itemCountMap.put(item, itemCountMap.getOrDefault(item, 0) + count);
-        }
+			itemCountMap.put(item, itemCountMap.getOrDefault(item, 0) + count);
+		}
 
-        List<ItemStack> mergedStacks = new ArrayList<>();
+		List<ItemStack> mergedStacks = new ArrayList<>();
 
-        for (Map.Entry<Item, Integer> entry : itemCountMap.entrySet()) {
-            Item item = entry.getKey();
-            int totalCount = entry.getValue();
-            int maxStackSize = item.getDefaultMaxStackSize();
+		for (Map.Entry<Item, Integer> entry : itemCountMap.entrySet()) {
+			Item item = entry.getKey();
+			int totalCount = entry.getValue();
+			int maxStackSize = item.getDefaultMaxStackSize();
 
-            while (totalCount > 0) {
-                int stackSize = Math.min(totalCount, maxStackSize);
-                mergedStacks.add(new ItemStack(item, stackSize));
-                totalCount -= stackSize;
-            }
-        }
+			while (totalCount > 0) {
+				int stackSize = Math.min(totalCount, maxStackSize);
+				mergedStacks.add(new ItemStack(item, stackSize));
+				totalCount -= stackSize;
+			}
+		}
 
-        return mergedStacks;
-    }
+		return mergedStacks;
+	}
 
-    public static String formatItemStacks(List<ItemStack> itemStacks) {
-        return itemStacks.stream()
-            .filter(stack -> !stack.isEmpty())
-            .map(stack -> formatItemStack(stack))
-            .collect(Collectors.joining(", "));
-    }
+	public static String formatItemStacks(List<ItemStack> itemStacks) {
+		return itemStacks.stream()
+			.filter(stack -> !stack.isEmpty())
+			.map(stack -> formatItemStack(stack))
+			.collect(Collectors.joining(", "));
+	}
 
-    private static String formatItemStack(ItemStack stack) {
-        String itemName = stack.getItem().getName(stack).getString();
-        int count = stack.getCount();
-        return itemName + " " + count + "×";
-    }
+	private static String formatItemStack(ItemStack stack) {
+		String itemName = stack.getItem().getName(stack).getString();
+		int count = stack.getCount();
+		return itemName + " " + count + "×";
+	}
 }

@@ -203,7 +203,7 @@ public class CompleteQuests {
 
 		ChatFormatting broadcastColour = ColourFunctions.getById(ConfigHandler.broadcastMessageColourIndex);
 		if (broadcastColour == null) {
-            Constants.logger.warn("[" + Reference.NAME + "] Unable to find text formatting colour for message one with index '{}'.", ConfigHandler.broadcastMessageColourIndex);
+			Constants.logger.warn("[" + Reference.NAME + "] Unable to find text formatting colour for message one with index '{}'.", ConfigHandler.broadcastMessageColourIndex);
 			return;
 		}
 

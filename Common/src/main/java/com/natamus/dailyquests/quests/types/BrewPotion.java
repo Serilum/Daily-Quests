@@ -74,13 +74,13 @@ public class BrewPotion extends AbstractQuest {
 	@Override
 	public String getLocalizedIdentifierName(Level level, Identifier identifier) {
 		Registry<Potion> registry = this.getRegistry(level);
-        if (registry.containsKey(identifier)) {
+		if (registry.containsKey(identifier)) {
 			Optional<Holder.Reference<Potion>> holderOptional = registry.get(identifier);
 			if (holderOptional.isPresent()) {
 				ItemStack potionStack = PotionContents.createItemStack(Items.POTION, holderOptional.get());
 				return potionStack.getDisplayName().getString().replaceAll("[\\[\\]]", "");
 			}
-        }
+		}
 		return identifier.toString();
 	}
 

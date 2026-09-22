@@ -17,76 +17,76 @@ import java.util.List;
 import java.util.UUID;
 
 public class ToClientSendQuestsPacket {
-    public static final Identifier CHANNEL = Identifier.fromNamespaceAndPath(Reference.MOD_ID, "to_client_send_quests_packet");
+	public static final Identifier CHANNEL = Identifier.fromNamespaceAndPath(Reference.MOD_ID, "to_client_send_quests_packet");
 
-    private final List<Integer> dataEntries;
-    private final List<String> questTitles;
-    private final List<String> questDescriptions;
-    private final List<Pair<Integer, Integer>> questProgress;
+	private final List<Integer> dataEntries;
+	private final List<String> questTitles;
+	private final List<String> questDescriptions;
+	private final List<Pair<Integer, Integer>> questProgress;
 
-    public ToClientSendQuestsPacket(List<Integer> dataEntriesIn, List<String> rawQuestsIn, List<String> questDescriptionsIn, List<Pair<Integer, Integer>> questProgressIn) {
-        this.dataEntries = dataEntriesIn;
-        this.questTitles = rawQuestsIn;
-        this.questDescriptions = questDescriptionsIn;
-        this.questProgress = questProgressIn;
-    }
+	public ToClientSendQuestsPacket(List<Integer> dataEntriesIn, List<String> rawQuestsIn, List<String> questDescriptionsIn, List<Pair<Integer, Integer>> questProgressIn) {
+		this.dataEntries = dataEntriesIn;
+		this.questTitles = rawQuestsIn;
+		this.questDescriptions = questDescriptionsIn;
+		this.questProgress = questProgressIn;
+	}
 
-    public static ToClientSendQuestsPacket decode(FriendlyByteBuf buf) {
-        try {
-            List<Integer> dataEntriesIn = buf.readList(bufIn -> bufIn.readInt());
-            List<String> questTitlesIn = buf.readList(bufIn -> bufIn.readUtf(32767));
-            List<String> questDescriptionsIn = buf.readList(bufIn -> bufIn.readUtf(32767));
-            List<Pair<Integer, Integer>> questProgressIn = buf.readList(buffer -> {
-                return Pair.of(buffer.readInt(), buffer.readInt());
-            });
+	public static ToClientSendQuestsPacket decode(FriendlyByteBuf buf) {
+		try {
+			List<Integer> dataEntriesIn = buf.readList(bufIn -> bufIn.readInt());
+			List<String> questTitlesIn = buf.readList(bufIn -> bufIn.readUtf(32767));
+			List<String> questDescriptionsIn = buf.readList(bufIn -> bufIn.readUtf(32767));
+			List<Pair<Integer, Integer>> questProgressIn = buf.readList(buffer -> {
+				return Pair.of(buffer.readInt(), buffer.readInt());
+			});
 
-            return new ToClientSendQuestsPacket(dataEntriesIn, questTitlesIn, questDescriptionsIn, questProgressIn);
-        }
-        catch (IndexOutOfBoundsException ex) {
-            return new ToClientSendQuestsPacket(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
-        }
-    }
+			return new ToClientSendQuestsPacket(dataEntriesIn, questTitlesIn, questDescriptionsIn, questProgressIn);
+		}
+		catch (IndexOutOfBoundsException ex) {
+			return new ToClientSendQuestsPacket(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+		}
+	}
 
-    public void encode(FriendlyByteBuf buf) {
-        buf.writeCollection(dataEntries, (bufOut, i) -> bufOut.writeInt(i));
-        buf.writeCollection(questTitles, (bufOut, s) -> bufOut.writeUtf(s));
-        buf.writeCollection(questDescriptions, (bufOut, s) -> bufOut.writeUtf(s));
-        buf.writeCollection(questProgress, (buffer, pair) -> {
-            buffer.writeInt(pair.getFirst());
-            buffer.writeInt(pair.getSecond());
-        });
-    }
+	public void encode(FriendlyByteBuf buf) {
+		buf.writeCollection(dataEntries, (bufOut, i) -> bufOut.writeInt(i));
+		buf.writeCollection(questTitles, (bufOut, s) -> bufOut.writeUtf(s));
+		buf.writeCollection(questDescriptions, (bufOut, s) -> bufOut.writeUtf(s));
+		buf.writeCollection(questProgress, (buffer, pair) -> {
+			buffer.writeInt(pair.getFirst());
+			buffer.writeInt(pair.getSecond());
+		});
+	}
 
-    public static void handle(PacketContext<ToClientSendQuestsPacket> ctx) {
-        if (ctx.side().equals(Side.CLIENT)) {
-            ToClientSendQuestsPacket packet = ctx.message();
-            PlayerDataObject previousPlayerDataObject = VariablesClient.playerDataObject;
+	public static void handle(PacketContext<ToClientSendQuestsPacket> ctx) {
+		if (ctx.side().equals(Side.CLIENT)) {
+			ToClientSendQuestsPacket packet = ctx.message();
+			PlayerDataObject previousPlayerDataObject = VariablesClient.playerDataObject;
 
-            VariablesClient.playerDataObject = new PlayerDataObject(UUID.randomUUID(), packet.dataEntries);
-            if (VariablesClient.playerDataObject.isShowingIntroduction()) {
-                UtilClient.showDailyQuestsIntroduction(packet.questTitles.size());
-                return;
-            }
+			VariablesClient.playerDataObject = new PlayerDataObject(UUID.randomUUID(), packet.dataEntries);
+			if (VariablesClient.playerDataObject.isShowingIntroduction()) {
+				UtilClient.showDailyQuestsIntroduction(packet.questTitles.size());
+				return;
+			}
 
-            VariablesClient.questTitles = packet.questTitles;
-            VariablesClient.questDescriptions = packet.questDescriptions;
-            VariablesClient.questProgress = packet.questProgress;
+			VariablesClient.questTitles = packet.questTitles;
+			VariablesClient.questDescriptions = packet.questDescriptions;
+			VariablesClient.questProgress = packet.questProgress;
 
-            boolean reRollCountChanged = false;
-            if (previousPlayerDataObject != null) {
-                reRollCountChanged = previousPlayerDataObject.getReRollsLeft() != VariablesClient.playerDataObject.getReRollsLeft();
-            }
+			boolean reRollCountChanged = false;
+			if (previousPlayerDataObject != null) {
+				reRollCountChanged = previousPlayerDataObject.getReRollsLeft() != VariablesClient.playerDataObject.getReRollsLeft();
+			}
 
-            if (VariablesClient.waitingForNewQuest || reRollCountChanged) {
-                VariablesClient.waitingForNewQuest = false;
+			if (VariablesClient.waitingForNewQuest || reRollCountChanged) {
+				VariablesClient.waitingForNewQuest = false;
 
-                for (Button button : VariablesClient.reRollButtons.values()) {
-                    button.visible = false;
-                }
+				for (Button button : VariablesClient.reRollButtons.values()) {
+					button.visible = false;
+				}
 
-                VariablesClient.reRollButtons = new LinkedHashMap<>();
-                VariablesClient.addedRerollButtons = false;
-            }
-        }
-    }
+				VariablesClient.reRollButtons = new LinkedHashMap<>();
+				VariablesClient.addedRerollButtons = false;
+			}
+		}
+	}
 }

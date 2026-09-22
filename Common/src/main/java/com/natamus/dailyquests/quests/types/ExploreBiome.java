@@ -69,10 +69,10 @@ public class ExploreBiome extends AbstractQuest {
 	@Override
 	public String getLocalizedIdentifierName(Level level, Identifier identifier) {
 		Registry<Biome> registry = this.getRegistry(level);
-        if (registry.containsKey(identifier)) {
+		if (registry.containsKey(identifier)) {
 			String translationKey = "biome." + identifier.getNamespace() + "." + identifier.getPath();
-            return Component.translatable(translationKey).getString();
-        }
+			return Component.translatable(translationKey).getString();
+		}
 		return identifier.toString();
 	}
 

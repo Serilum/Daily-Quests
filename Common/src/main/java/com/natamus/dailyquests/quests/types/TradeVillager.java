@@ -77,12 +77,12 @@ public class TradeVillager extends AbstractQuest {
 	@Override
 	public String getLocalizedIdentifierName(Level level, Identifier identifier) {
 		Registry<VillagerProfession> registry = this.getRegistry(level);
-        if (registry.containsKey(identifier)) {
+		if (registry.containsKey(identifier)) {
 			Optional<Holder.Reference<VillagerProfession>> villagerProfessionOptionalReference = registry.get(identifier);
 			if (villagerProfessionOptionalReference.isPresent()) {
 				return StringFunctions.capitalizeEveryWord(villagerProfessionOptionalReference.get().value().name().getString());
 			}
-        }
+		}
 		return identifier.toString();
 	}
 

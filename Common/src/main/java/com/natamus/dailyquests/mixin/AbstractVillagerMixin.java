@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class AbstractVillagerMixin {
 	@Shadow private Player tradingPlayer;;
 
-	@Inject(method = "notifyTrade(Lnet/minecraft/world/item/trading/MerchantOffer;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/advancements/criterion/TradeTrigger;trigger(Lnet/minecraft/server/level/ServerPlayer;Lnet/minecraft/world/entity/npc/villager/AbstractVillager;Lnet/minecraft/world/item/ItemStack;)V"))
+	@Inject(method = "notifyTrade(Lnet/minecraft/world/item/trading/MerchantOffer;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/advancements/triggers/TradeTrigger;trigger(Lnet/minecraft/server/level/ServerPlayer;Lnet/minecraft/world/entity/npc/villager/AbstractVillager;Lnet/minecraft/world/item/ItemStack;)V"))
 	public void notifyTrade(MerchantOffer merchantOffer, CallbackInfo ci) {
 		if (this.tradingPlayer == null) {
 			return;
