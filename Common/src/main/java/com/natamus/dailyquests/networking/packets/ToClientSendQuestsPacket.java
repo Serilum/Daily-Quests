@@ -9,6 +9,7 @@ import com.natamus.dailyquests.util.Reference;
 import com.natamus.dailyquests.util.UtilClient;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.resources.Identifier;
 
 import java.util.ArrayList;
@@ -33,12 +34,14 @@ public class ToClientSendQuestsPacket {
 
 	public static ToClientSendQuestsPacket decode(FriendlyByteBuf buf) {
 		try {
-			List<Integer> dataEntriesIn = buf.readList(bufIn -> bufIn.readInt());
-			List<String> questTitlesIn = buf.readList(bufIn -> bufIn.readUtf(32767));
-			List<String> questDescriptionsIn = buf.readList(bufIn -> bufIn.readUtf(32767));
-			List<Pair<Integer, Integer>> questProgressIn = buf.readList(buffer -> {
-				return Pair.of(buffer.readInt(), buffer.readInt());
-			});
+			List<Integer> dataEntriesIn = ByteBufCodecs.INT.apply(ByteBufCodecs.list()).decode(buf);
+			List<String> questTitlesIn = ByteBufCodecs.STRING_UTF8.apply(ByteBufCodecs.list()).decode(buf);
+			List<String> questDescriptionsIn = ByteBufCodecs.STRING_UTF8.apply(ByteBufCodecs.list()).decode(buf);
+			List<Pair<Integer, Integer>> questProgressIn = new ArrayList<>();
+			int questProgressCount = buf.readVarInt();
+			for (int i = 0; i < questProgressCount; i++) {
+				questProgressIn.add(Pair.of(buf.readInt(), buf.readInt()));
+			}
 
 			return new ToClientSendQuestsPacket(dataEntriesIn, questTitlesIn, questDescriptionsIn, questProgressIn);
 		}
@@ -48,13 +51,14 @@ public class ToClientSendQuestsPacket {
 	}
 
 	public void encode(FriendlyByteBuf buf) {
-		buf.writeCollection(dataEntries, (bufOut, i) -> bufOut.writeInt(i));
-		buf.writeCollection(questTitles, (bufOut, s) -> bufOut.writeUtf(s));
-		buf.writeCollection(questDescriptions, (bufOut, s) -> bufOut.writeUtf(s));
-		buf.writeCollection(questProgress, (buffer, pair) -> {
-			buffer.writeInt(pair.getFirst());
-			buffer.writeInt(pair.getSecond());
-		});
+		ByteBufCodecs.INT.apply(ByteBufCodecs.list()).encode(buf, dataEntries);
+		ByteBufCodecs.STRING_UTF8.apply(ByteBufCodecs.list()).encode(buf, questTitles);
+		ByteBufCodecs.STRING_UTF8.apply(ByteBufCodecs.list()).encode(buf, questDescriptions);
+		buf.writeVarInt(questProgress.size());
+		for (Pair<Integer, Integer> pair : questProgress) {
+			buf.writeInt(pair.getFirst());
+			buf.writeInt(pair.getSecond());
+		}
 	}
 
 	public static void handle(PacketContext<ToClientSendQuestsPacket> ctx) {

@@ -30,9 +30,9 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CropBlock;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
-import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
+import net.minecraft.world.level.levelgen.feature.AbstractOreFeature;
+import net.minecraft.world.level.levelgen.feature.BlockReplacement;
+import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import oshi.util.tuples.Triplet;
 
@@ -97,12 +97,11 @@ public class Util {
 			for (HolderSet<PlacedFeature> placedFeatureHolderSet : biomeGenerationSettings.features()) {
 				for (Holder<PlacedFeature> placedFeatureHolder : placedFeatureHolderSet.stream().toList()) {
 					PlacedFeature placedFeature = placedFeatureHolder.value();
-					for (Holder<ConfiguredFeature<?, ?>> configuredFeatureHolder : placedFeature.getFeatures().toList()) {
-						ConfiguredFeature<?, ?> configuredFeature = configuredFeatureHolder.value();
-						FeatureConfiguration config = configuredFeature.config();
-						if (config instanceof OreConfiguration oreConfig) {
-							for (OreConfiguration.TargetBlockState targetBlockState : oreConfig.targetStates) {
-								Identifier targetBlockIdentifier = blockRegistry.getKey(targetBlockState.state.getBlock());
+					for (Holder<Feature> featureHolder : placedFeature.getFeatures().toList()) {
+						Feature feature = featureHolder.value();
+						if (feature instanceof AbstractOreFeature oreFeature) {
+							for (BlockReplacement targetBlockState : oreFeature.targetStates()) {
+								Identifier targetBlockIdentifier = blockRegistry.getKey(targetBlockState.state().getBlock());
 								if (targetBlockIdentifier.toString().contains("infested_")) {
 									continue;
 								}
