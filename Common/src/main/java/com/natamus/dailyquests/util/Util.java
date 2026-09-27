@@ -274,43 +274,43 @@ public class Util {
 		return false;
 	}
 
-    public static List<ItemStack> mergeItemStacks(List<ItemStack> itemStacks) {
-        Map<Item, Integer> itemCountMap = new HashMap<>();
+	public static List<ItemStack> mergeItemStacks(List<ItemStack> itemStacks) {
+		Map<Item, Integer> itemCountMap = new HashMap<>();
 
-        for (ItemStack stack : itemStacks) {
-            Item item = stack.getItem();
-            int count = stack.getCount();
+		for (ItemStack stack : itemStacks) {
+			Item item = stack.getItem();
+			int count = stack.getCount();
 
-            itemCountMap.put(item, itemCountMap.getOrDefault(item, 0) + count);
-        }
+			itemCountMap.put(item, itemCountMap.getOrDefault(item, 0) + count);
+		}
 
-        List<ItemStack> mergedStacks = new ArrayList<>();
+		List<ItemStack> mergedStacks = new ArrayList<>();
 
-        for (Map.Entry<Item, Integer> entry : itemCountMap.entrySet()) {
-            Item item = entry.getKey();
-            int totalCount = entry.getValue();
-            int maxStackSize = item.getDefaultMaxStackSize();
+		for (Map.Entry<Item, Integer> entry : itemCountMap.entrySet()) {
+			Item item = entry.getKey();
+			int totalCount = entry.getValue();
+			int maxStackSize = item.getDefaultMaxStackSize();
 
-            while (totalCount > 0) {
-                int stackSize = Math.min(totalCount, maxStackSize);
-                mergedStacks.add(new ItemStack(item, stackSize));
-                totalCount -= stackSize;
-            }
-        }
+			while (totalCount > 0) {
+				int stackSize = Math.min(totalCount, maxStackSize);
+				mergedStacks.add(new ItemStack(item, stackSize));
+				totalCount -= stackSize;
+			}
+		}
 
-        return mergedStacks;
-    }
+		return mergedStacks;
+	}
 
-    public static String formatItemStacks(List<ItemStack> itemStacks) {
-        return itemStacks.stream()
-            .filter(stack -> !stack.isEmpty())
-            .map(stack -> formatItemStack(stack))
-            .collect(Collectors.joining(", "));
-    }
+	public static String formatItemStacks(List<ItemStack> itemStacks) {
+		return itemStacks.stream()
+			.filter(stack -> !stack.isEmpty())
+			.map(stack -> formatItemStack(stack))
+			.collect(Collectors.joining(", "));
+	}
 
-    private static String formatItemStack(ItemStack stack) {
-        String itemName = stack.getItem().getName(stack).getString();
-        int count = stack.getCount();
-        return itemName + " " + count + "×";
-    }
+	private static String formatItemStack(ItemStack stack) {
+		String itemName = stack.getItem().getName(stack).getString();
+		int count = stack.getCount();
+		return itemName + " " + count + "×";
+	}
 }

@@ -78,10 +78,10 @@ public class SmeltItem extends AbstractQuest {
 	@Override
 	public String getLocalizedIdentifierName(Level level, ResourceLocation identifier) {
 		Registry<Item> registry = this.getRegistry(level);
-        if (registry.containsKey(identifier)) {
-            ItemStack itemStack = new ItemStack(registry.get(identifier));
-            return itemStack.getDisplayName().getString().replaceAll("[\\[\\]]", "");
-        }
+		if (registry.containsKey(identifier)) {
+			ItemStack itemStack = new ItemStack(registry.get(identifier));
+			return itemStack.getDisplayName().getString().replaceAll("[\\[\\]]", "");
+		}
 		return identifier.toString();
 	}
 

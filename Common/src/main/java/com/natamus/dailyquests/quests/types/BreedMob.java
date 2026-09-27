@@ -60,9 +60,9 @@ public class BreedMob extends AbstractQuest {
 	@Override
 	public String getLocalizedIdentifierName(Level level, ResourceLocation identifier) {
 		Registry<EntityType<?>> registry = this.getRegistry(level);
-        if (registry.containsKey(identifier)) {
-            return registry.get(identifier).getDescription().getString().replaceAll("[\\[\\]]", "");
-        }
+		if (registry.containsKey(identifier)) {
+			return registry.get(identifier).getDescription().getString().replaceAll("[\\[\\]]", "");
+		}
 		return identifier.toString();
 	}
 

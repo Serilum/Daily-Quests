@@ -60,9 +60,9 @@ public class HarvestBlock extends AbstractQuest {
 	@Override
 	public String getLocalizedIdentifierName(Level level, ResourceLocation identifier) {
 		Registry<Block> registry = this.getRegistry(level);
-        if (registry.containsKey(identifier)) {
+		if (registry.containsKey(identifier)) {
 			return registry.get(identifier).getName().getString().replaceAll("[\\[\\]]", "");
-        }
+		}
 		return identifier.toString();
 	}
 

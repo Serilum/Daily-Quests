@@ -42,7 +42,7 @@ public class ModForge {
 			MinecraftForge.EVENT_BUS.register(ForgeDailyQuestClientEvents.class);
 		}
 
-    	MinecraftForge.EVENT_BUS.register(ForgeDailyQuestServerEvents.class);
+		MinecraftForge.EVENT_BUS.register(ForgeDailyQuestServerEvents.class);
 		MinecraftForge.EVENT_BUS.register(ForgeDailyQuestTrackEvents.class);
 	}
 

@@ -6,16 +6,16 @@ import com.natamus.dailyquests.networking.packets.ToServerAttemptReRollQuest;
 
 public class PacketRegistration {
 
-    public void init() {
-        initClientPackets();
-        initServerPackets();
-    }
+	public void init() {
+		initClientPackets();
+		initServerPackets();
+	}
 
-    private void initClientPackets() {
-        Network.registerPacket(ToClientSendQuestsPacket.CHANNEL, ToClientSendQuestsPacket.class, ToClientSendQuestsPacket::encode, ToClientSendQuestsPacket::decode, ToClientSendQuestsPacket::handle);
-    }
+	private void initClientPackets() {
+		Network.registerPacket(ToClientSendQuestsPacket.CHANNEL, ToClientSendQuestsPacket.class, ToClientSendQuestsPacket::encode, ToClientSendQuestsPacket::decode, ToClientSendQuestsPacket::handle);
+	}
 
-    private void initServerPackets() {
-        Network.registerPacket(ToServerAttemptReRollQuest.CHANNEL, ToServerAttemptReRollQuest.class, ToServerAttemptReRollQuest::encode, ToServerAttemptReRollQuest::decode, ToServerAttemptReRollQuest::handle);
-    }
+	private void initServerPackets() {
+		Network.registerPacket(ToServerAttemptReRollQuest.CHANNEL, ToServerAttemptReRollQuest.class, ToServerAttemptReRollQuest::encode, ToServerAttemptReRollQuest::decode, ToServerAttemptReRollQuest::handle);
+	}
 }

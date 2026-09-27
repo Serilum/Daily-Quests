@@ -113,9 +113,9 @@ public class QuestObject {
 		return this.currentProgress == this.goalProgress;
 	}
 
-    public AbstractQuest getType() {
-        return this.type;
-    }
+	public AbstractQuest getType() {
+		return this.type;
+	}
 
 	public ResourceLocation getIdentifier() {
 		return this.identifier;

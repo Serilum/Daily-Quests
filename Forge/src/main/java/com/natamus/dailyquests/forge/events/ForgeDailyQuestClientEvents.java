@@ -2,7 +2,6 @@ package com.natamus.dailyquests.forge.events;
 
 import com.natamus.dailyquests.data.ConstantsClient;
 import com.natamus.dailyquests.events.DailyQuestsClientEvents;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;

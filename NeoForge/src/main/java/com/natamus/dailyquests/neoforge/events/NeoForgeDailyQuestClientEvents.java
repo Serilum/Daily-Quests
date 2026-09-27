@@ -2,7 +2,6 @@ package com.natamus.dailyquests.neoforge.events;
 
 import com.natamus.dailyquests.data.ConstantsClient;
 import com.natamus.dailyquests.events.DailyQuestsClientEvents;
-import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.InputEvent;

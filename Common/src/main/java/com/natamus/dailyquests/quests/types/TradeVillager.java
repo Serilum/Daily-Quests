@@ -70,9 +70,9 @@ public class TradeVillager extends AbstractQuest {
 	@Override
 	public String getLocalizedIdentifierName(Level level, ResourceLocation identifier) {
 		Registry<VillagerProfession> registry = this.getRegistry(level);
-        if (registry.containsKey(identifier)) {
-            return StringFunctions.capitalizeEveryWord(registry.get(identifier).name());
-        }
+		if (registry.containsKey(identifier)) {
+			return StringFunctions.capitalizeEveryWord(registry.get(identifier).name());
+		}
 		return identifier.toString();
 	}
 
