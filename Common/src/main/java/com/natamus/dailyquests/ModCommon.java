@@ -6,6 +6,7 @@ import com.natamus.dailyquests.config.ConfigHandler;
 import com.natamus.dailyquests.data.ConstantsClient;
 import com.natamus.dailyquests.events.DailyQuestsClientEvents;
 import com.natamus.dailyquests.networking.PacketRegistration;
+import com.mojang.blaze3d.platform.InputConstants;
 
 public class ModCommon {
 
@@ -29,6 +30,6 @@ public class ModCommon {
 	}
 
 	public static void registerHotkeys() {
-		ConstantsClient.toggleQuestListKey = Services.REGISTERKEYMAPPING.registerKeyMapping("collective.dailyquests.key.togglequestlistcollapse", 46, "key.categories.misc");
+		ConstantsClient.toggleQuestListKey = Services.REGISTERKEYMAPPING.registerKeyMapping("collective.dailyquests.key.togglequestlistcollapse", InputConstants.KEY_PERIOD,"key.categories.misc");
 	}
 }
