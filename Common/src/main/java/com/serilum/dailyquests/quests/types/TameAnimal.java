@@ -2,6 +2,7 @@ package com.serilum.dailyquests.quests.types;
 
 import com.serilum.dailyquests.config.ConfigHandler;
 import com.serilum.dailyquests.data.Constants;
+import com.serilum.dailyquests.data.Variables;
 import com.serilum.dailyquests.quests.object.QuestObject;
 import com.serilum.dailyquests.quests.types.main.AbstractQuest;
 import net.minecraft.core.Registry;
@@ -9,13 +10,10 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
 
 public class TameAnimal extends AbstractQuest {
 	private final String name;
@@ -41,20 +39,16 @@ public class TameAnimal extends AbstractQuest {
 
 	@Override
 	public boolean isAllowedIdentifier(Level level, ResourceLocation identifier) {
-		EntityType<?> entityType = this.getRegistry(level).get(identifier);
-		return entityType.create(level) instanceof TamableAnimal;
+		return Variables.tamableMobs.contains(identifier);
 	}
 
 	@Override @Nullable
 	public ResourceLocation getRandomQuestIdentifier(Level level) {
-		List<ResourceLocation> resourceLocations = new ArrayList<ResourceLocation>(this.getRegistry(level).keySet());
-
-		ResourceLocation identifier = resourceLocations.get(Constants.random.nextInt(resourceLocations.size()));
-		while (!this.isAllowedIdentifier(level, identifier)) {
-			identifier = resourceLocations.get(Constants.random.nextInt(resourceLocations.size()));
+		if (Variables.tamableMobs.isEmpty()) {
+			return null;
 		}
 
-		return identifier;
+		return Variables.tamableMobs.get(Constants.random.nextInt(Variables.tamableMobs.size()));
 	}
 
 	@Override

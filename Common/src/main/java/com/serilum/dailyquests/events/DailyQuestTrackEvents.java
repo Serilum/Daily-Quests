@@ -116,7 +116,7 @@ public class DailyQuestTrackEvents {
 			return;
 		}
 
-		TaskFunctions.enqueueCollectiveTask(level.getServer(), () -> {
+		TaskFunctions.enqueueCollectiveServerTask(level.getServer(), () -> {
 			Player causedByPlayer = causedByPlayerIn;
 			if (causedByPlayer == null) {
 				causedByPlayer = level.getNearestPlayer(offspring, 10.0);
@@ -214,7 +214,7 @@ public class DailyQuestTrackEvents {
 		}
 
 		ResourceLocation resultIdentifier = level.registryAccess().registryOrThrow(Registries.ITEM).getKey(itemStack.getItem());
-		if (resultIdentifier == null) {
+		if (resultIdentifier == null || !Variables.smeltableItems.containsKey(resultIdentifier)) {
 			return;
 		}
 

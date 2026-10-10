@@ -15,6 +15,8 @@ import net.minecraft.world.level.Level;
 
 public class DailyQuestServerEvents {
 	public static void onWorldLoad(Level level) {
+		Variables.lastWorldTime = -1;
+
 		if (!Variables.generatedIdentifierLists) {
 			Util.generateIdentifierLists(level);
 		}
@@ -26,10 +28,27 @@ public class DailyQuestServerEvents {
 			return;
 		}
 
-		if (WorldFunctions.getWorldTime(serverLevel) - 1 == ConfigHandler.newQuestGenerateTimeInTicks) {
+		int worldTime = WorldFunctions.getWorldTime(serverLevel);
+		int previousWorldTime = Variables.lastWorldTime;
+		Variables.lastWorldTime = worldTime;
+
+		if (previousWorldTime < 0 || previousWorldTime == worldTime) {
+			return;
+		}
+
+		if (passedQuestGenerateTime(previousWorldTime, worldTime)) {
 			ReRollFunctions.refreshAllPlayerReRolls(serverLevel);
 			GenerateQuests.replaceFinishedPlayerQuests(serverLevel);
 		}
+	}
+
+	private static boolean passedQuestGenerateTime(int previousWorldTime, int worldTime) {
+		int questGenerateTime = ConfigHandler.newQuestGenerateTimeInTicks + 1;
+		if (worldTime > previousWorldTime) {
+			return previousWorldTime < questGenerateTime && questGenerateTime <= worldTime;
+		}
+
+		return questGenerateTime > previousWorldTime || questGenerateTime <= worldTime;
 	}
 
 	public static void onEntityJoinLevel(Level level, Entity entity) {

@@ -78,6 +78,35 @@ public class QuestObject {
 		return this.type.getName().replaceAll("([a-z])([A-Z])", "$1 $2");
 	}
 
+	public String getQuestTitleTranslationKey(Level level) {
+		return switch (this.getQuestTitle(level)) {
+			case "Block Arrow" -> "collective.dailyquests.questtitle.blockarrow";
+			case "Breed Mob" -> "collective.dailyquests.questtitle.breedmob";
+			case "Brew Potion" -> "collective.dailyquests.questtitle.brewpotion";
+			case "Catch Fish" -> "collective.dailyquests.questtitle.catchfish";
+			case "Collect Honey" -> "collective.dailyquests.questtitle.collecthoney";
+			case "Complete Raid" -> "collective.dailyquests.questtitle.completeraid";
+			case "Consume Item" -> "collective.dailyquests.questtitle.consumeitem";
+			case "Cook Item" -> "collective.dailyquests.questtitle.cookitem";
+			case "Craft Item" -> "collective.dailyquests.questtitle.craftitem";
+			case "Enchant Item" -> "collective.dailyquests.questtitle.enchantitem";
+			case "Explore Biome" -> "collective.dailyquests.questtitle.explorebiome";
+			case "Gain Level" -> "collective.dailyquests.questtitle.gainlevel";
+			case "Harvest Block" -> "collective.dailyquests.questtitle.harvestblock";
+			case "Harvest Crop" -> "collective.dailyquests.questtitle.harvestcrop";
+			case "Ignite Creeper" -> "collective.dailyquests.questtitle.ignitecreeper";
+			case "Reflect Ghast" -> "collective.dailyquests.questtitle.reflectghast";
+			case "Shear Sheep" -> "collective.dailyquests.questtitle.shearsheep";
+			case "Slay Mob" -> "collective.dailyquests.questtitle.slaymob";
+			case "Smelt Item" -> "collective.dailyquests.questtitle.smeltitem";
+			case "Tame Animal" -> "collective.dailyquests.questtitle.tameanimal";
+			case "Trade Villager" -> "collective.dailyquests.questtitle.tradevillager";
+			case "Travel Blocks" -> "collective.dailyquests.questtitle.travelblocks";
+			case "Use Item" -> "collective.dailyquests.questtitle.useitem";
+			default -> "";
+		};
+	}
+
 	public String getQuestDescription(Level level) {
 		return this.type.getLocalizedIdentifierName(level, this.identifier);
 	}

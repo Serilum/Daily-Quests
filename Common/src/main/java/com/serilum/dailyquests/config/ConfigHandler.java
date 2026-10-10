@@ -25,8 +25,6 @@ public class ConfigHandler extends DuskConfig {
 
 	@Entry public static boolean disableGUIQuestListEntirely = false;
 	@Entry public static boolean showQuestIntroductionScreenFirstLogin = true;
-	@Entry public static String introductionQuestScreenTitles = "Daily Quests|Collapse List|Getting Started";
-	@Entry public static String introductionQuestScreenDescriptions = "Introduction.|Press the . key to collapse this list.|Receive your first %questcount% quests next in-game morning!";
 
 	@Entry public static boolean questListDrawTextShadow = true;
 	@Entry(min = 0, max = 3000) public static int questListVerticalOffset = 5;
@@ -97,12 +95,6 @@ public class ConfigHandler extends DuskConfig {
 		));
 		configMetaData.put("showQuestIntroductionScreenFirstLogin", Arrays.asList(
 			"If an introduction to daily quests should be shown in the quest list area on the first day."
-		));
-		configMetaData.put("introductionQuestScreenTitles", Arrays.asList(
-			"The green titles of the introduction screen. Each title is split by the | symbol."
-		));
-		configMetaData.put("introductionQuestScreenDescriptions", Arrays.asList(
-			"The yellow descriptions of the introduction screen. Each description is split by the | symbol."
 		));
 
 		configMetaData.put("questListDrawTextShadow", Arrays.asList(

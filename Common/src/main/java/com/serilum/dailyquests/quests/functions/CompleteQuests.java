@@ -97,7 +97,7 @@ public class CompleteQuests {
 			questsCompleted = Variables.playerDataMap.get(playerUUID).getQuestsCompleted();
 		}
 
-		TaskFunctions.enqueueCollectiveTask(serverLevel.getServer(), () -> {
+		TaskFunctions.enqueueCollectiveServerTask(serverLevel.getServer(), () -> {
 			int experience = giveExperienceToPlayer(serverLevel, serverPlayer, abstractQuest, quest);
 
 			List<ItemStack> lootTableItemStacks = giveLootTableItems(serverLevel, serverPlayer, questsCompleted);
@@ -234,7 +234,7 @@ public class CompleteQuests {
 			summaryContent.add(" > Items received: " + Util.formatItemStacks(lootTableItemStacks));
 		}
 
-		MessageFunctions.sendMessage(serverPlayer, Component.translatable("collective.dailyquests.message.questsummary").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.GRAY), true);
+		MessageFunctions.sendMessage(serverPlayer, MessageFunctions.getTranslatableMessageComponent(serverPlayer, "collective.dailyquests.message.questsummary").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.GRAY), true);
 		for (String content : summaryContent) {
 			MessageFunctions.sendMessage(serverPlayer, content, ChatFormatting.GRAY);
 		}
