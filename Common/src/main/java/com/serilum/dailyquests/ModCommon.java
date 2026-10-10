@@ -30,6 +30,10 @@ public class ModCommon {
 	}
 
 	public static void registerHotkeys() {
+		if (!Services.MODLOADER.isClientSide()) {
+			return;
+		}
+
 		ConstantsClient.toggleQuestListKey = Services.REGISTERKEYMAPPING.registerKeyMapping("collective.dailyquests.key.togglequestlistcollapse", InputConstants.KEY_PERIOD,"key.categories.misc");
 	}
 }

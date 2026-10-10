@@ -5,6 +5,7 @@ import com.natamus.collective.implementations.networking.api.Dispatcher;
 import com.serilum.dailyquests.data.Constants;
 import com.serilum.dailyquests.data.Variables;
 import com.serilum.dailyquests.networking.packets.ToClientSendQuestsPacket;
+import com.serilum.dailyquests.quests.functions.GenerateQuests;
 import com.serilum.dailyquests.quests.object.PlayerDataObject;
 import com.serilum.dailyquests.quests.object.QuestObject;
 import com.serilum.dailyquests.quests.types.main.AbstractQuest;
@@ -19,6 +20,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -141,6 +143,10 @@ public class Util {
 				if (entity instanceof Animal) {
 					Variables.breedableMobs.add(entityTypeRegistry.getKey(entityType));
 				}
+
+				if (entity instanceof TamableAnimal) {
+					Variables.tamableMobs.add(entityTypeRegistry.getKey(entityType));
+				}
 			}
 			catch (Exception ignored) { }
 		}
@@ -198,6 +204,10 @@ public class Util {
 				return;
 			}
 
+			if (isOnIntroduction && questData.getSecond().isEmpty()) {
+				questData = Pair.of(questData.getFirst(), GenerateQuests.getIntroductionQuests());
+			}
+
 			Variables.playerDataMap.put(playerUUID, questData.getFirst());
 			Variables.playerQuestDataMap.put(playerUUID, questData.getSecond());
 
@@ -253,12 +263,16 @@ public class Util {
 		List<String> questTitles = new ArrayList<>();
 		List<String> questDescriptions = new ArrayList<>();
 		List<Pair<Integer, Integer>> questProgress = new ArrayList<>();
+		List<String> questTypes = new ArrayList<>();
+		List<String> questIdentifiers = new ArrayList<>();
 
 		for (QuestObject quest : questData.getSecond().values()) {
 			if (quest == null) {
 				questTitles.add("");
 				questDescriptions.add("");
 				questProgress.add(Pair.of(0, 0));
+				questTypes.add("");
+				questIdentifiers.add("");
 				continue;
 			}
 
@@ -270,9 +284,11 @@ public class Util {
 			questTitles.add(clientQuestData.getA());
 			questDescriptions.add(clientQuestData.getB());
 			questProgress.add(clientQuestData.getC());
+			questTypes.add(quest.getType().getName());
+			questIdentifiers.add(quest.getIdentifier().toString());
 		}
 
-		Dispatcher.sendToClient(new ToClientSendQuestsPacket(dataEntries, questTitles, questDescriptions, questProgress), serverPlayer);
+		Dispatcher.sendToClient(new ToClientSendQuestsPacket(dataEntries, questTitles, questDescriptions, questProgress, questTypes, questIdentifiers), serverPlayer);
 	}
 
 	public static boolean hasQuestData(Player player) {
@@ -285,26 +301,34 @@ public class Util {
 	}
 
 	public static List<ItemStack> mergeItemStacks(List<ItemStack> itemStacks) {
-		Map<Item, Integer> itemCountMap = new HashMap<>();
-
-		for (ItemStack stack : itemStacks) {
-			Item item = stack.getItem();
-			int count = stack.getCount();
-
-			itemCountMap.put(item, itemCountMap.getOrDefault(item, 0) + count);
-		}
-
 		List<ItemStack> mergedStacks = new ArrayList<>();
 
-		for (Map.Entry<Item, Integer> entry : itemCountMap.entrySet()) {
-			Item item = entry.getKey();
-			int totalCount = entry.getValue();
-			int maxStackSize = item.getDefaultMaxStackSize();
+		for (ItemStack stack : itemStacks) {
+			if (stack.isEmpty()) {
+				continue;
+			}
 
-			while (totalCount > 0) {
-				int stackSize = Math.min(totalCount, maxStackSize);
-				mergedStacks.add(new ItemStack(item, stackSize));
-				totalCount -= stackSize;
+			ItemStack remainingStack = stack.copy();
+			for (ItemStack mergedStack : mergedStacks) {
+				if (!ItemStack.isSameItemSameComponents(mergedStack, remainingStack)) {
+					continue;
+				}
+
+				int transferCount = Math.min(remainingStack.getCount(), mergedStack.getMaxStackSize() - mergedStack.getCount());
+				if (transferCount <= 0) {
+					continue;
+				}
+
+				mergedStack.grow(transferCount);
+				remainingStack.shrink(transferCount);
+
+				if (remainingStack.isEmpty()) {
+					break;
+				}
+			}
+
+			while (!remainingStack.isEmpty()) {
+				mergedStacks.add(remainingStack.split(remainingStack.getMaxStackSize()));
 			}
 		}
 
