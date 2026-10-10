@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public class ReRollFunctions {
 	public static void refreshAllPlayerReRolls(ServerLevel serverLevel) {
-		for (ServerPlayer serverPlayer : serverLevel.players()) {
+		for (ServerPlayer serverPlayer : serverLevel.getServer().getPlayerList().getPlayers()) {
 			UUID playerUUID = serverPlayer.getUUID();
 			if (!Variables.playerDataMap.containsKey(playerUUID)) {
 				continue;

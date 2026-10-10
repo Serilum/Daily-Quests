@@ -28,26 +28,30 @@ public class GenerateQuests {
 
 		PlayerDataObject playerDataObject = new PlayerDataObject(playerUUID, true);
 
-		LinkedHashMap<AbstractQuest, QuestObject> quests = new LinkedHashMap<>();
-		for (AbstractQuest abstractQuest : getRandomQuestTypes(Set.of(), ConfigHandler.defaultTotalQuestCount)) {
-			quests.put(abstractQuest, null);
-		}
-
 		Variables.playerDataMap.put(playerUUID, playerDataObject);
-		Variables.playerQuestDataMap.put(playerUUID, quests);
+		Variables.playerQuestDataMap.put(playerUUID, getIntroductionQuests());
 
 		Util.saveQuestDataPlayer(serverPlayer);
 		Util.sendQuestDataToClient(serverPlayer);
 	}
 
+	public static LinkedHashMap<AbstractQuest, QuestObject> getIntroductionQuests() {
+		LinkedHashMap<AbstractQuest, QuestObject> quests = new LinkedHashMap<>();
+		for (AbstractQuest abstractQuest : getRandomQuestTypes(Set.of(), ConfigHandler.defaultTotalQuestCount)) {
+			quests.put(abstractQuest, null);
+		}
+		return quests;
+	}
+
 	public static void replaceFinishedPlayerQuests(ServerLevel serverLevel) {
-		for (ServerPlayer serverPlayer : serverLevel.players()) {
+		for (ServerPlayer serverPlayer : serverLevel.getServer().getPlayerList().getPlayers()) {
 			if (serverPlayer.tickCount < ConfigHandler.newQuestGenerateTimeInTicks + 1) {
 				continue;
 			}
 
 			UUID playerUUID = serverPlayer.getUUID();
-			if (!Variables.playerQuestDataMap.containsKey(playerUUID)) {
+			boolean isShowingIntroduction = Variables.playerDataMap.containsKey(playerUUID) && Variables.playerDataMap.get(playerUUID).isShowingIntroduction();
+			if (!Variables.playerQuestDataMap.containsKey(playerUUID) || isShowingIntroduction) {
 				replaceAllPlayerQuests(serverLevel, serverPlayer, ConfigHandler.defaultTotalQuestCount);
 				continue;
 			}
@@ -79,6 +83,10 @@ public class GenerateQuests {
 
 		LinkedHashMap<AbstractQuest, QuestObject> quests = getNewQuests(serverLevel, Set.of(), count);
 
+		if (Variables.playerDataMap.containsKey(playerUUID)) {
+			Variables.playerDataMap.get(playerUUID).setShowingIntroduction(false);
+		}
+
 		Variables.playerQuestDataMap.put(playerUUID, quests);
 
 		Util.saveQuestDataPlayer(serverPlayer, quests);
@@ -91,14 +99,39 @@ public class GenerateQuests {
 			return;
 		}
 
-		LinkedHashMap<AbstractQuest, QuestObject> newQuests = getNewQuests(serverLevel, Variables.playerQuestDataMap.get(playerUUID).keySet(), questNumbers.size());
+		LinkedHashMap<AbstractQuest, QuestObject> currentQuests = Variables.playerQuestDataMap.get(playerUUID);
+
+		Set<AbstractQuest> keptQuestTypes = new HashSet<>();
+		int questNumber = 0;
+		for (AbstractQuest questType : currentQuests.keySet()) {
+			questNumber += 1;
+			if (!questNumbers.contains(questNumber)) {
+				keptQuestTypes.add(questType);
+			}
+		}
+
+		LinkedHashMap<AbstractQuest, QuestObject> newQuests = getNewQuests(serverLevel, currentQuests.keySet(), questNumbers.size());
+		if (newQuests.size() < questNumbers.size()) {
+			Set<AbstractQuest> questTypesToSkip = new HashSet<>(keptQuestTypes);
+			questTypesToSkip.addAll(newQuests.keySet());
+
+			newQuests.putAll(getNewQuests(serverLevel, questTypesToSkip, questNumbers.size() - newQuests.size()));
+		}
 
 		LinkedHashMap<AbstractQuest, QuestObject> quests = new LinkedHashMap<>();
-		for (QuestObject questObject : Variables.playerQuestDataMap.get(playerUUID).values()) {
-			if (questNumbers.contains(quests.size()+1)) {
-				Map.Entry<AbstractQuest, QuestObject> questEntry = newQuests.firstEntry();
-				quests.put(questEntry.getKey(), questEntry.getValue());
-				newQuests.remove(questEntry.getKey());
+		questNumber = 0;
+		for (QuestObject questObject : currentQuests.values()) {
+			questNumber += 1;
+
+			if (questNumbers.contains(questNumber)) {
+				Map.Entry<AbstractQuest, QuestObject> questEntry = newQuests.pollFirstEntry();
+				if (questEntry != null) {
+					quests.put(questEntry.getKey(), questEntry.getValue());
+				}
+				continue;
+			}
+
+			if (questObject == null || questObject.getType() == null) {
 				continue;
 			}
 

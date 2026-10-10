@@ -12,6 +12,7 @@ public class Variables {
 	public static HashMap<UUID, LinkedHashMap<AbstractQuest, QuestObject>> playerQuestDataMap = new HashMap<>();
 	public static HashMap<UUID, PlayerDataObject> playerDataMap = new HashMap<>();
 	public static HashMap<UUID, Vec3> lastPlayerLocation = new HashMap<>();
+	public static int lastWorldTime = -1;
 
 	public static boolean generatedIdentifierLists = false;
 	public static List<Identifier> breedableMobs = new ArrayList<>();
@@ -19,5 +20,6 @@ public class Variables {
 	public static List<Identifier> cropBlocks = new ArrayList<>();
 	public static List<Identifier> naturallyGeneratedOres = new ArrayList<>();
 	public static HashMap<Identifier, List<Identifier>> smeltableItems = new HashMap<>();
+	public static List<Identifier> tamableMobs = new ArrayList<>();
 	public static List<Identifier> usableItems = new ArrayList<>();
 }

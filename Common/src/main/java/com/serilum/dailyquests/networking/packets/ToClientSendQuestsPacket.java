@@ -23,12 +23,16 @@ public class ToClientSendQuestsPacket {
 	private final List<String> questTitles;
 	private final List<String> questDescriptions;
 	private final List<Pair<Integer, Integer>> questProgress;
+	private final List<String> questTypes;
+	private final List<String> questIdentifiers;
 
-	public ToClientSendQuestsPacket(List<Integer> dataEntriesIn, List<String> rawQuestsIn, List<String> questDescriptionsIn, List<Pair<Integer, Integer>> questProgressIn) {
+	public ToClientSendQuestsPacket(List<Integer> dataEntriesIn, List<String> rawQuestsIn, List<String> questDescriptionsIn, List<Pair<Integer, Integer>> questProgressIn, List<String> questTypesIn, List<String> questIdentifiersIn) {
 		this.dataEntries = dataEntriesIn;
 		this.questTitles = rawQuestsIn;
 		this.questDescriptions = questDescriptionsIn;
 		this.questProgress = questProgressIn;
+		this.questTypes = questTypesIn;
+		this.questIdentifiers = questIdentifiersIn;
 	}
 
 	public static ToClientSendQuestsPacket decode(FriendlyByteBuf buf) {
@@ -39,11 +43,13 @@ public class ToClientSendQuestsPacket {
 			List<Pair<Integer, Integer>> questProgressIn = buf.readList(buffer -> {
 				return Pair.of(buffer.readInt(), buffer.readInt());
 			});
+			List<String> questTypesIn = buf.readList(bufIn -> bufIn.readUtf(32767));
+			List<String> questIdentifiersIn = buf.readList(bufIn -> bufIn.readUtf(32767));
 
-			return new ToClientSendQuestsPacket(dataEntriesIn, questTitlesIn, questDescriptionsIn, questProgressIn);
+			return new ToClientSendQuestsPacket(dataEntriesIn, questTitlesIn, questDescriptionsIn, questProgressIn, questTypesIn, questIdentifiersIn);
 		}
 		catch (IndexOutOfBoundsException ex) {
-			return new ToClientSendQuestsPacket(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+			return new ToClientSendQuestsPacket(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
 		}
 	}
 
@@ -55,6 +61,8 @@ public class ToClientSendQuestsPacket {
 			buffer.writeInt(pair.getFirst());
 			buffer.writeInt(pair.getSecond());
 		});
+		buf.writeCollection(questTypes, (bufOut, s) -> bufOut.writeUtf(s));
+		buf.writeCollection(questIdentifiers, (bufOut, s) -> bufOut.writeUtf(s));
 	}
 
 	public static void handle(PacketContext<ToClientSendQuestsPacket> ctx) {
@@ -68,8 +76,8 @@ public class ToClientSendQuestsPacket {
 				return;
 			}
 
-			VariablesClient.questTitles = packet.questTitles;
-			VariablesClient.questDescriptions = packet.questDescriptions;
+			VariablesClient.questTitles = UtilClient.getLocalizedQuestTitles(packet.questTitles, packet.questTypes, packet.questIdentifiers);
+			VariablesClient.questDescriptions = UtilClient.getLocalizedQuestDescriptions(packet.questDescriptions, packet.questTypes, packet.questIdentifiers);
 			VariablesClient.questProgress = packet.questProgress;
 
 			boolean reRollCountChanged = false;

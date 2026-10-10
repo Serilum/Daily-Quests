@@ -12,7 +12,7 @@ public class QuestWrapper<T extends AbstractQuest> {
 	private static final List<QuestWrapper<?>> ALL_WRAPPED_QUESTS = new ArrayList<>();
 	private static final List<AbstractQuest> ALL_QUESTS = new ArrayList<>();
 
-	// public static final QuestWrapper<BlockArrow> BLOCK_ARROW = new QuestWrapper<>(new BlockArrow());
+	public static final QuestWrapper<BlockArrow> BLOCK_ARROW = new QuestWrapper<>(new BlockArrow());
 	public static final QuestWrapper<BreedMob> BREED_MOB = new QuestWrapper<>(new BreedMob());
 	public static final QuestWrapper<BrewPotion> BREW_POTION = new QuestWrapper<>(new BrewPotion());
 	public static final QuestWrapper<CatchFish> CATCH_FISH = new QuestWrapper<>(new CatchFish());

@@ -20,7 +20,6 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.server.permissions.Permissions;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -54,7 +53,7 @@ public class CommandDailyQuests {
 						reRollsRemaining = playerDataObject.getReRollsLeft();
 					}
 
-					MessageFunctions.sendMessage(serverPlayer, Component.translatable("collective.dailyquests.message.stats", Reference.NAME).withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.GRAY), true);
+					MessageFunctions.sendMessage(serverPlayer, MessageFunctions.getTranslatableMessageComponent(serverPlayer, "collective.dailyquests.message.stats", Reference.NAME).withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.GRAY), true);
 					MessageFunctions.sendTranslatableMessage(serverPlayer, " ", "collective.dailyquests.message.questscompleted", ChatFormatting.GRAY, questsCompleted);
 					MessageFunctions.sendTranslatableMessage(serverPlayer, " ", "collective.dailyquests.message.rerollsremaining", ChatFormatting.GRAY, reRollsRemaining);
 
@@ -79,7 +78,7 @@ public class CommandDailyQuests {
 
 					ServerLevel serverLevel = serverPlayer.level();
 
-					MessageFunctions.sendMessage(serverPlayer, Component.translatable("collective.dailyquests.message.quests", serverPlayer.getName().getString()).withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.GRAY), true);
+					MessageFunctions.sendMessage(serverPlayer, MessageFunctions.getTranslatableMessageComponent(serverPlayer, "collective.dailyquests.message.quests", serverPlayer.getName().getString()).withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.GRAY), true);
 
 					LinkedHashMap<AbstractQuest, QuestObject> quests = Variables.playerQuestDataMap.get(playerUUID);
 					for (QuestObject quest : quests.values()) {
@@ -151,6 +150,11 @@ public class CommandDailyQuests {
 					Level level = targetPlayer.level();
 
 					QuestObject questObject = new ArrayList<>(quests.entrySet()).get(number-1).getValue();
+					if (questObject == null) {
+						MessageFunctions.sendTranslatableMessage(source, "collective.dailyquests.message.questnumberexist", ChatFormatting.RED);
+						return 0;
+					}
+
 					QuestWrapper<?> wrappedQuestType = QuestWrapper.getWrappedQuestType(questObject.getType());
 
 					CompleteQuests.updateQuestProgression(wrappedQuestType, level, targetPlayer, Constants.defaultIdentifier, 1000000, true);
@@ -249,9 +253,15 @@ public class CommandDailyQuests {
 					}
 
 					LinkedHashMap<AbstractQuest, QuestObject> quests = new LinkedHashMap<>();
+					int currentQuestNumber = 0;
 					for (QuestObject questObject : Variables.playerQuestDataMap.get(playerUUID).values()) {
-						if (quests.size()+1 == questNumber) {
+						currentQuestNumber += 1;
+						if (currentQuestNumber == questNumber) {
 							quests.put(quest.getType(), quest);
+							continue;
+						}
+
+						if (questObject == null || questObject.getType().equals(quest.getType())) {
 							continue;
 						}
 

@@ -214,7 +214,7 @@ public class DailyQuestTrackEvents {
 		}
 
 		Identifier resultIdentifier = level.registryAccess().lookupOrThrow(Registries.ITEM).getKey(itemStack.getItem());
-		if (resultIdentifier == null) {
+		if (resultIdentifier == null || !Variables.smeltableItems.containsKey(resultIdentifier)) {
 			return;
 		}
 
@@ -259,7 +259,7 @@ public class DailyQuestTrackEvents {
 		CompleteQuests.updateQuestProgression(QuestWrapper.IGNITE_CREEPER, level, (ServerPlayer)player, IgniteCreeper.staticGetIdentifierFromObject(level, null), 1);
 	}
 
-	/* public static void onArrowBlock(Level level, Player player) {
+	public static void onArrowBlock(Level level, Player player) {
 		if (level.isClientSide()) {
 			return;
 		}
@@ -269,7 +269,7 @@ public class DailyQuestTrackEvents {
 		}
 
 		CompleteQuests.updateQuestProgression(QuestWrapper.BLOCK_ARROW, level, (ServerPlayer)player, BlockArrow.staticGetIdentifierFromObject(level, null), 1);
-	} */
+	}
 
 	public static void onGhastReflect(Level level, Player player, Ghast ghast) {
 		if (level.isClientSide()) {
