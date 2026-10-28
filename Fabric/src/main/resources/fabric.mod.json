@@ -1,22 +1,22 @@
 {
   "schemaVersion": 1,
   "id": "dailyquests",
-  "version": "2.8",
+  "version": "4.0",
 
   "name": "Daily Quests",
   "description": "Complete randomly generated quests each day for experience and loot! Made for the 2024 CurseForge ModJam.",
-  "authors": [ "Rick South" ],
+  "authors": [ "Serilum" ],
   "contact": {
     "homepage": "https://serilum.com/mod/daily-quests",
     "sources": "https://github.com/Serilum/Daily-Quests",
     "issues": "https://github.com/Serilum/.issue-tracker/labels/Mod:%20Daily%20Quests"
   },
 
-  "license": "All Right Reserved",
+  "license": "All Rights Reserved",
   "icon": "icon.png",
 
   "environment": "*",
-  "entrypoints": { "main": [ "com.natamus.dailyquests.ModFabric" ], "client": [ "com.natamus.dailyquests.ModFabricClient" ], "modmenu": [ "com.natamus.dailyquests.fabric.config.IntegrateModMenu" ] },
+  "entrypoints": { "main": [ "com.serilum.dailyquests.ModFabric" ], "client": [ "com.serilum.dailyquests.ModFabricClient" ], "modmenu": [ "com.serilum.dailyquests.fabric.config.IntegrateModMenu" ] },
   "mixins": [
     "dailyquests.mixins.json"
   ],
@@ -26,13 +26,13 @@
     "fabric-api": "*",
     "minecraft": ">=26.1",
     "java": ">=25",
-    "collective": ">=8.25"
+    "collective": ">=8.67"
   },
 
   "custom": {
     "modmenu": {
       "links": {
-        "Donate <3" : "https://serilum.com/donate"
+        "❤ Patreon" : "https://link.serilum.com/patreon"
       }
     }
   },
@@ -41,14 +41,13 @@
 	  " ",
 	  "Thank you very much to my Membership sponsors for supporting the development of this mod!",
 	  " ",
-	  "If you would like to contribute too, check out https://serilum.com/donate.",
+	  "If you would like to contribute too, check out https://serilum.com/donate",
 	  " ",
 	  "Membership sponsors:",
-	  " Andrean Olgo",
+	  " AnyankaT",
 	  " aternosorg",
 	  " Cherriesaurus",
 	  " Linda Jansen",
-	  " Michelle Smith",
 	  " MWS",
 	  " Tyler Behl"
   ]
